@@ -2,9 +2,9 @@ class Solution {
 public:
     bool isAnagram(string s, string t) {
 
-        if(s.size()!=t.size()) return false;
+        if(s.size()!=t.size()) return false; 
 
-        sort(s.begin(),s.end());
+        sort(s.begin(),s.end()); // O(nlogn)
         sort(t.begin(),t.end());
 
         for(int i=0;i<s.size();i++){
