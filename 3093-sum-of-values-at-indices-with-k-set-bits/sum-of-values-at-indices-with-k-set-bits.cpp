@@ -1,23 +1,26 @@
 class Solution {
 public:
-    int sumIndicesWithKSetBits(vector<int>& nums, int k) {
-        
-        int sum=0;
+    int countSetBits(int num) {
+    int count = 0;
+    while (num) {
+        count += num & 1;
+        num >>= 1;
+    }
+    return count;
+}
 
-        for(int i=0;i<nums.size();i++){
-            int count=0;
-            int temp = i;
+int sumIndicesWithKSetBits(std::vector<int>& nums, int k) {
+    int sum = 0;
 
-        while (temp) {
-            if (temp & 1) {
-                count++;
-            }
-            temp >>= 1; // Right shift by 1 to move to the next bit
-            }
-            if(count==k){
-                sum+=nums[i];
-            }
+    for (int i = 0; i < nums.size(); i++) {
+        // Count the number of set bits in the binary representation of the index
+        int count = countSetBits(i);
+
+        if (count == k) {
+            sum += nums[i];
         }
-        return sum;
+    }
+
+    return sum;
     }
 };
