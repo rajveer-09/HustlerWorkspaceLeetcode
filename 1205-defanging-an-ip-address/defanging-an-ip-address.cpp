@@ -7,7 +7,6 @@ public:
                 s.push_back('[');
                 s.push_back('.');
                 s.push_back(']');
-
                 // or use s+="[.]"
             } 
             else
