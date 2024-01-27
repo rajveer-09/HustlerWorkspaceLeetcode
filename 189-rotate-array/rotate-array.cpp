@@ -4,19 +4,17 @@ public:
         int n = nums.size();
     k %= n; // Calculate effective rotation count
 
-    // Reverse the entire array
-    for (int i = 0; i < n / 2; ++i) {
-        swap(nums[i], nums[n - i - 1]);
+    // Create a temporary array to store rotated elements
+    vector<int> temp(nums.begin() + n - k, nums.end());
+
+    // Shift elements to the right
+    for (int i = n - k - 1; i >= 0; --i) {
+        nums[i + k] = nums[i];
     }
 
-    // Reverse the first k elements
-    for (int i = 0; i < k / 2; ++i) {
-        swap(nums[i], nums[k - i - 1]);
-    }
-
-    // Reverse the remaining elements
-    for (int i = k; i < (n + k) / 2; ++i) {
-        swap(nums[i], nums[n - i - 1 + k]);
+    // Copy rotated elements from the temporary array
+    for (int i = 0; i < k; ++i) {
+        nums[i] = temp[i];
     }
     }
 };
