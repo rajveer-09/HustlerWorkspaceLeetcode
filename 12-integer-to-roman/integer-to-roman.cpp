@@ -1,18 +1,15 @@
 class Solution {
 public:
     string intToRoman(int num) {
-        vector<pair<int, string>> romanMap = {
-        {1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"},
-        {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"},
-        {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"}
-    };
+        vector<string> symbols = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+    vector<int> values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
 
-    // Iterate through the mapping to construct the Roman numeral string
+    // Iterate through the arrays to construct the Roman numeral string
     string roman;
-    for (const auto& pair : romanMap) {
-        while (num >= pair.first) {
-            roman += pair.second;
-            num -= pair.first;
+    for (int i = 0; i < symbols.size(); i++) {
+        while (num >= values[i]) {
+            roman += symbols[i];
+            num -= values[i];
         }
     }
     return roman;
