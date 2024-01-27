@@ -4,16 +4,19 @@ public:
         int n = nums.size();
     k %= n; // Calculate effective rotation count
 
-    int count = 0;
-    for (int start = 0; count < n; ++start) {
-        int current = start;
-        int prev = nums[start];
-        do {
-            int next = (current + k) % n;
-            swap(nums[next], prev);
-            current = next;
-            ++count;
-        } while (start != current);
+    // Reverse the entire array
+    for (int i = 0; i < n / 2; ++i) {
+        swap(nums[i], nums[n - i - 1]);
+    }
+
+    // Reverse the first k elements
+    for (int i = 0; i < k / 2; ++i) {
+        swap(nums[i], nums[k - i - 1]);
+    }
+
+    // Reverse the remaining elements
+    for (int i = k; i < (n + k) / 2; ++i) {
+        swap(nums[i], nums[n - i - 1 + k]);
     }
     }
 };
