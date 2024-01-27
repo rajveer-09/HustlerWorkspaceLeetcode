@@ -12,15 +12,16 @@ public:
         return -1;
     }
     int romanToInt(string s) {
-        int index=0;
-        int sum=0;
-        while(index<s.size()-1){
-            if(num(s[index])<num(s[index+1])) sum-=num(s[index]);
-            else if(num(s[index])>num(s[index+1])) sum+=num(s[index]);
-            else sum+=num(s[index]);
-            index++;
+        int sum = 0;
+    for (int i = 0; i < s.size(); i++) {
+        int current = num(s[i]);
+        int next = (i + 1 < s.size()) ? num(s[i + 1]) : 0;
+        if (current < next) {
+            sum -= current;
+        } else {
+            sum += current;
         }
-        sum+=num(s[index]);
-        return sum;
+    }
+    return sum;
     }
 };
