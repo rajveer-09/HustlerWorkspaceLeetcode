@@ -1,20 +1,22 @@
 class Solution {
 public:
-    void rotate(vector<int>& nums, int k) {
-        int n = nums.size();
+    void reverse(vector<int>& nums, int start, int end) {
+    while (start < end) {
+        swap(nums[start], nums[end]);
+        start++;
+        end--;
+    }
+}
+
+void rotate(vector<int>& nums, int k) {
+    int n = nums.size();
     k %= n; // Calculate effective rotation count
 
-    // Create a temporary array to store rotated elements
-    vector<int> temp(nums.begin() + n - k, nums.end());
-
-    // Shift elements to the right
-    for (int i = n - k - 1; i >= 0; --i) {
-        nums[i + k] = nums[i];
-    }
-
-    // Copy rotated elements from the temporary array
-    for (int i = 0; i < k; ++i) {
-        nums[i] = temp[i];
-    }
+    // Reverse the entire array
+    reverse(nums, 0, n - 1);
+    // Reverse the first k elements
+    reverse(nums, 0, k - 1);
+    // Reverse the remaining elements
+    reverse(nums, k, n - 1);
     }
 };
