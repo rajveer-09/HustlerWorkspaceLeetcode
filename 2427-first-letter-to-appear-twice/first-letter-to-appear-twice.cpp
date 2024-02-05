@@ -6,6 +6,6 @@ public:
             if(oc[s[i]-'a']==true) return s[i];
             oc[s[i]-'a']=true;
         }
-        return -1;
+        return 'a';
     }
 };
