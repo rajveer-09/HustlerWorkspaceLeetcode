@@ -5,6 +5,8 @@ public:
         bool b=false;
         for(int i=0;i<s.size();i++){
             if(b==true && s[i]=='a') return false;
+            else if(s[i]=='a' & a==true) continue;
+            else if(s[i]=='b' & b==true) continue;
             else if(s[i]=='a') a=true;
             else if(s[i]=='b') b=true;
         }
