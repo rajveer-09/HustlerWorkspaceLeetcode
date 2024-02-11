@@ -6,8 +6,8 @@ public:
         int j=0;
         while(j<n){
             while(nums[i]!=0 && i<n-1) i++;
-            if(i>j) j=i;
             if(i==n-1) return;
+            if(i>j) j=i;
             if(nums[j]!=0){
                 swap(nums[i++],nums[j]);
             }
