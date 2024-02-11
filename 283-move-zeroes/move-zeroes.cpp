@@ -1,6 +1,9 @@
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
+        if (nums.size() == 1) {
+            return;
+        }
         int n=nums.size();
         int i=0;
         int j=0;
