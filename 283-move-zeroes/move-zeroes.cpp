@@ -7,6 +7,7 @@ public:
         while(j<n){
             while(nums[i]!=0 && i<n-1) i++;
             if(i>j) j=i;
+            if(i==n-1) return;
             if(nums[j]!=0){
                 swap(nums[i++],nums[j]);
             }
