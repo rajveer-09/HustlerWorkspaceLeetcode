@@ -6,7 +6,7 @@ public:
         for (const string& word : words) {
             bool consistent = true;
             for (char c : word) {
-                if (allowed.find(c) == string::npos) { 
+                if (allowed.find(c) == -1) { 
                     consistent = false;
                     break;
                 }
