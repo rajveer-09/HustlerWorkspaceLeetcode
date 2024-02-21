@@ -1,24 +1,19 @@
 class Solution {
 public:
     int balancedStringSplit(string s) {
-        int cnt1 = 0;
-        int cnt2 = 0;
-        int ans = 0;
-        for(int i = 0; i<s.length(); i++)
-        {
-            if(s[i] == 'R')
-            {
-                cnt1++;
+        int count_r=0;
+        int count_l=0;
+        int ans=0;
+        for(int i=0;i<s.length();i++){
+            if (s[i]=='R'){
+                count_r++;
+            } else if(s[i]=='L'){
+                count_l++;
             }
-            else if(s[i] == 'L')
-            {
-                cnt2++;
-            }
-            if(cnt1 == cnt2)
-            {
+            if(count_r==count_l){
                 ans++;
-                cnt1 = 0;
-                cnt2 = 0;
+                count_r=0;
+                count_l=0;
             }
         }
         return ans;
