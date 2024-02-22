@@ -1,46 +1,18 @@
 class Solution {
 public:
     string decodeMessage(string key, string message) {
-        map<char,char>mp;
-
-        int counter=0;
-
-        int idx=0;
-
-        while(idx < key.length())
-        {
-           if(key[idx]==' ')
-           {
-              idx++;
-           }
-           else if((key[idx]>='a' and key[idx]<='z') and mp.find(key[idx])==mp.end())
-           {
-              char ch = char('a' + counter);
-              char substitute = key[idx];
-
-              mp[substitute]=ch;
-
-              idx++;
-              counter++;
-           } 
-           else if(mp.find(key[idx]) != mp.end())
-           {
-               idx++;
-           }
-        } 
-
-        string ans="";
-        for(int i=0;i<message.length();i++)
-        {
-           if(message[i]==' ')
-           {
-              ans.push_back(' ');	
-           }
-           else if(message[i]>='a' and message[i]<='z')
-           {
-              ans.push_back(mp[message[i]]);
-           }
+        unordered_map<char,char>hash;
+        char ch='a';
+        for(int i=0;i<key.size();i++){
+            if(key[i]==' ')
+            continue;
+            if(!hash.count(key[i]))
+            hash[key[i]]=ch++;
         }
-        return ans;
+        for(int i=0;i<message.size();i++){
+            if(hash.count(message[i]))
+            message[i]=hash[message[i]];
+        }
+        return message;
     }
 };
