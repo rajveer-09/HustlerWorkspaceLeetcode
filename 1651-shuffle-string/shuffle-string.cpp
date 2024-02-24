@@ -1,11 +1,17 @@
 class Solution {
 public:
     string restoreString(string s, vector<int>& indices) {
-        string ans=s;
-        int n=indices.size();
-        for(int i=0;i<n;i++){
-            ans[indices[i]]=s[i];
+        string ret = "";
+        vector<char> ch( s.length() );
+
+        for( int i = 0; i < indices.size(); i++ ) {
+            ch[ indices[i] ] = s[i];
         }
-        return ans;
+        
+        for( int i = 0; i < ch.size(); i++ ) {
+            ret.push_back( ch[i] );
+        }
+
+        return ret;
     }
 };
