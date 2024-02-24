@@ -1,51 +1,139 @@
-class Solution {
+static const int _ = []() { std::ios::sync_with_stdio(false); std::cin.tie(nullptr); std::cout.tie(nullptr); return 0; }();
+class UnionFindSet
+{
 public:
-    vector<int> findAllPeople(int n, vector<vector<int>>& meetings, int firstPerson) {
-        std::set<int> knownSet = {0, firstPerson};
-        
-        std::vector<std::vector<std::pair<int, int>>> sortedMeetings;
-        std::sort(meetings.begin(), meetings.end(), [](const std::vector<int>& a, const std::vector<int>& b) {
-            return a[2] < b[2];
-        });
+    UnionFindSet(int n) : _parent(n), _size(n)
+    {
+        for(int i = 0; i < n; ++i)
+        {
+            _parent[i] = i;
+            _size[i] = 1;
+        }
+    }
+    bool Union(int x, int y)
+    {
+        int rootX = Find(x);
+        int rootY = Find(y);
 
-        std::set<int> seenTime;
-        
-        for (const auto& meeting : meetings) {
-            if (seenTime.find(meeting[2]) == seenTime.end()) {
-                seenTime.insert(meeting[2]);
-                sortedMeetings.push_back({});
-            }
-            sortedMeetings.back().push_back({meeting[0], meeting[1]});
+        if(rootX == rootY)
+        {
+            return true;
         }
 
-        for (const auto& meetingGroup : sortedMeetings) {
-            std::set<int> peopleKnowSecret;
-            std::unordered_map<int, std::vector<int>> graph;
-            
-            for (const auto& pair : meetingGroup) {
-                graph[pair.first].push_back(pair.second);
-                graph[pair.second].push_back(pair.first);
-                
-                if (knownSet.find(pair.first) != knownSet.end()) peopleKnowSecret.insert(pair.first);
-                if (knownSet.find(pair.second) != knownSet.end()) peopleKnowSecret.insert(pair.second);
+        if(rootX != rootY)
+        {
+            if(_size[rootY] < _size[rootX])
+            {
+                _parent[rootY] = rootX;
+                _size[rootX] += _size[rootY];
             }
-            
-            std::queue<int> queue;
-            for (int person : peopleKnowSecret) queue.push(person);
-        
-            while (!queue.empty()) {
-                int curr = queue.front();
-                queue.pop();
-                knownSet.insert(curr);
-                for (int neigh : graph[curr]) {
-                    if (knownSet.find(neigh) == knownSet.end()) {
-                        knownSet.insert(neigh);
-                        queue.push(neigh);
+            else
+            {
+                _parent[rootX] = rootY;
+                _size[rootY] += _size[rootX];
+
+            }
+        }
+
+        return false;
+    }
+
+    int Find(int x)
+    {
+        if(_parent[x] == x)
+        {
+            return x;
+        }
+
+        return _parent[x] = Find(_parent[x]);
+    }
+
+    int getGroup()
+    {
+        int g = 0;
+
+        for(int i = 0; i < _parent.size(); ++i)
+        {
+            if(i == _parent[i])
+            {
+                ++g;
+            }
+        }
+
+        return g;
+    }
+
+    vector<int> getGroupVec()
+    {
+        vector<int> res;
+
+        for(int i = 0; i < _parent.size(); ++i)
+        {
+            if(_parent[0] == _parent[i])
+            {
+                res.emplace_back(i);
+            }
+        }
+
+        return res;
+    }
+
+    void set(int num)
+    {
+        //cout << num << endl;
+        _parent[num] = num;
+        _size[num] = 1;
+    }
+
+private:
+    vector<int> _parent;
+    vector<int> _size;
+};
+class Solution
+{
+public:
+    vector<int> findAllPeople(int n, vector<vector<int>> &meetings, int firstPerson)
+    {
+        sort(meetings.begin(), meetings.end(), [&](vector<int> &a, vector<int> &b)
+            {
+                return a[2] < b[2];
+            });
+        //for(auto& meet : meetings){
+        //    cout << meet[0] << " " << meet[1] << " " << meet[2] << endl;
+        //}
+
+        vector<int> res(1, 0);
+        UnionFindSet ufs(n);
+        ufs.Union(0, firstPerson);
+        int m = meetings.size();
+
+        for(int i = 0; i < m; ++i)
+        {
+            int time = meetings[i][2];
+            ufs.Union(meetings[i][0], meetings[i][1]);
+
+            if(i == m - 1 || meetings[i][2] != meetings[i + 1][2])
+            {
+                int j = i;
+
+                while(j >= 0 && meetings[j][2] == time)
+                {
+                    if(ufs.Find(meetings[j][1]) != ufs.Find(0))
+                    {
+                        ufs.set(meetings[j][1]);
                     }
+
+                    if(ufs.Find(meetings[j][0]) != ufs.Find(0))
+                    {
+                        ufs.set(meetings[j][0]);
+                    }
+
+                    --j;
                 }
             }
         }
 
-        return std::vector<int>(knownSet.begin(), knownSet.end());
+        //cout << "------------" << endl;
+        return ufs.getGroupVec();
     }
 };
