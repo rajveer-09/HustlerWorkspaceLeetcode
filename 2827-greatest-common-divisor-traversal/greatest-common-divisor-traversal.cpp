@@ -1,59 +1,79 @@
-class Solution {
-public:
-    bool canTraverseAllPairs(vector<int>& nums) {
-        int numElements = nums.size();
-        if (numElements == 1) return true;
+const int mex = 1e5 + 5;
 
-        vector<int> disjointSet(numElements);
-        vector<int> setSize(numElements, 1);
-        unordered_map<int, int> factorFirstOccurrence;
+int par[mex];
+int siz[mex];
+int A[mex];
 
-        for (int i = 0; i < numElements; ++i) {
-            disjointSet[i] = i;
-            int num = nums[i];
-            int divisor = 2;
-            while (divisor * divisor <= num) {
-                if (num % divisor == 0) {
-                    if (factorFirstOccurrence.find(divisor) != factorFirstOccurrence.end()) {
-                        unionSets(disjointSet, setSize, i, factorFirstOccurrence[divisor]);
-                    } else {
-                        factorFirstOccurrence[divisor] = i;
-                    }
-                    while (num % divisor == 0) {
-                        num /= divisor;
-                    }
-                }
-                divisor++;
-            }
-            if (num > 1) {
-                if (factorFirstOccurrence.find(num) != factorFirstOccurrence.end()) {
-                    unionSets(disjointSet, setSize, i, factorFirstOccurrence[num]);
-                } else {
-                    factorFirstOccurrence[num] = i;
-                }
+void init(int x)
+{
+    for (int i = 0; i <= x; ++i)
+    {
+        par[i] = i;
+        siz[i] = 1;
+        A[i] = 0;
+    }
+
+    for (int i = 2; i <= x; ++i)
+    {
+        if (A[i] == 0)
+        {
+            A[i] = i;
+            for (int j = 2 * i; j <= x; j += i)
+            {
+                A[j] = i;
             }
         }
-
-        return setSize[findSetLeader(disjointSet, 0)] == numElements;
     }
+}
 
-private:
-    int findSetLeader(vector<int>& disjointSet, int x) {
-        if (disjointSet[x] == x) return x;
-        disjointSet[x] = findSetLeader(disjointSet, disjointSet[x]);
-        return disjointSet[x];
+int finder(int x)
+{
+    if (x == par[x]) return x;
+    return par[x] = finder(par[x]);
+}
+
+void merge(int a, int b)
+{
+    int x1 = finder(a);
+    int x2 = finder(b);
+    if (x1 != x2)
+    {
+        par[x2] = x1;
+        siz[x1] += siz[x2];
     }
+}
 
-    void unionSets(vector<int>& disjointSet, vector<int>& setSize, int x, int y) {
-        int xLeader = findSetLeader(disjointSet, x);
-        int yLeader = findSetLeader(disjointSet, y);
-        if (xLeader == yLeader) return;
-        if (setSize[xLeader] < setSize[yLeader]) {
-            disjointSet[xLeader] = yLeader;
-            setSize[yLeader] += setSize[xLeader];
-        } else {
-            disjointSet[yLeader] = xLeader;
-            setSize[xLeader] += setSize[yLeader];
+class Solution
+{
+    public:
+        bool canTraverseAllPairs(vector<int> &v)
+        {
+            int x = 0;
+            if(v.size()==1)
+                return true;
+            for (auto i: v)
+            {
+                if (i == 1) return false;
+                x = max(x, i);
+            }
+            init(x);
+
+            for (auto i: v)
+            {
+                int x = i;
+                while (x > 1)
+                {
+                    int p = A[x];
+                    merge(i, p);
+                    while (x % p == 0 && x > 1)
+                        x /= p;
+                }
+            }
+
+            int f = finder(v[0]);
+            for (auto i: v)
+                if (finder(i) != f)
+                    return false;
+            return true;
         }
-    }
 };
