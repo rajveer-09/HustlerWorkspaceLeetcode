@@ -1,16 +1,21 @@
 class Solution {
 public:
     vector<int> findRightInterval(vector<vector<int>>& intervals) {
-         vector<int> ans;
-        map<int, int> m { {INT_MAX, -1} };
+        vector<pair<int, int>> startPoints;
+        vector<int> ans(intervals.size());
 
-        for(int i=0; i<intervals.size(); i++)
-            m[intervals[i][0]] = i;
+        for (int i = 0; i < intervals.size(); i++) {
+            startPoints.push_back({intervals[i][0], i});
+        }
+        sort(startPoints.begin(), startPoints.end());
 
-       for (int i = 0; i < intervals.size(); i++) {
-            int endOfCurrentInterval = intervals[i][1];
-            auto it = m.lower_bound(endOfCurrentInterval);
-            ans.push_back(it->second);
+        for (int i = 0; i < intervals.size(); i++) {
+            auto it = lower_bound(startPoints.begin(), startPoints.end(), make_pair(intervals[i][1], -1));
+            if (it != startPoints.end()) {
+                ans[i] = it->second;
+            } else {
+                ans[i] = -1;
+            }
         }
         return ans;
     }
