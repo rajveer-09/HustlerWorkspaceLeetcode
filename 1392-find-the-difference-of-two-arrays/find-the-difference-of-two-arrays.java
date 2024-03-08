@@ -1,27 +1,45 @@
+import java.util.*;
+
 class Solution {
     public List<List<Integer>> findDifference(int[] nums1, int[] nums2) {
-        Set<Integer> set1 = new HashSet<>();
-        Set<Integer> set2 = new HashSet<>();
-        
-        for (int num : nums1) {
-            set1.add(num);
-        }
-        for (int num : nums2) {
-            set2.add(num);
-        }
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
         
         List<Integer> diff1 = new ArrayList<>();
         List<Integer> diff2 = new ArrayList<>();
-        for (int num : set1) {
-            if (!set2.contains(num)) {
-                diff1.add(num);
+        
+        int i = 0, j = 0;
+        while (i < nums1.length && j < nums2.length) {
+            if (nums1[i] < nums2[j]) {
+                if (i == 0 || nums1[i] != nums1[i - 1]) {
+                    diff1.add(nums1[i]);
+                }
+                i++;
+            } else if (nums1[i] > nums2[j]) {
+                if (j == 0 || nums2[j] != nums2[j - 1]) {
+                    diff2.add(nums2[j]);
+                }
+                j++;
+            } else {
+                i++;
+                j++;
             }
         }
-        for (int num : set2) {
-            if (!set1.contains(num)) {
-                diff2.add(num);
+        
+        while (i < nums1.length) {
+            if (i == 0 || nums1[i] != nums1[i - 1]) {
+                diff1.add(nums1[i]);
             }
+            i++;
         }
+        
+        while (j < nums2.length) {
+            if (j == 0 || nums2[j] != nums2[j - 1]) {
+                diff2.add(nums2[j]);
+            }
+            j++;
+        }
+        
         List<List<Integer>> result = new ArrayList<>();
         result.add(diff1);
         result.add(diff2);
