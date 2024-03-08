@@ -1,23 +1,15 @@
 public class Solution {
     public int subarraySum(int[] nums, int k) {
         int count = 0;
-        int[] sum = new int[nums.length + 1];
-        sum[0] = 0;
-
-        // Create cumulative sum array
-        for (int i = 1; i <= nums.length; i++) {
-            sum[i] = sum[i - 1] + nums[i - 1];
-        }
-
-        // Find subarrays with sum equal to k
         for (int start = 0; start < nums.length; start++) {
-            for (int end = start + 1; end <= nums.length; end++) {
-                if (sum[end] - sum[start] == k) {
+            int sum = 0;
+            for (int end = start; end < nums.length; end++) {
+                sum += nums[end];
+                if (sum == k) {
                     count++;
                 }
             }
         }
-
         return count;
     }
 }
