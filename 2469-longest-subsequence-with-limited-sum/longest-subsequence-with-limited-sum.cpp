@@ -11,13 +11,11 @@ public:
             temp[i] = sum;
         }
         for (int i = 0; i < m; i++) {
-            int count = 0;
             int flg = false;
             int st = 0, ed = n - 1;
             while (st <= ed) {
                 int mid = st + (ed - st) / 2;
                 if (temp[mid] == queries[i]) {
-                    count = mid;
                     flg = true;
                     st = mid + 1;
                 }
@@ -28,11 +26,7 @@ public:
                     ed = mid - 1;
                 }
             }
-            if (flg) {
-                ans[i] = st;
-            } else {
-                ans[i] = st;
-            }
+            ans[i]=st;
         }
         return ans;
     }
