@@ -15,16 +15,9 @@ public:
             int st = 0, ed = n - 1;
             while (st <= ed) {
                 int mid = st + (ed - st) / 2;
-                if (temp[mid] == queries[i]) {
-                    flg = true;
-                    st = mid + 1;
-                }
-                else if (temp[mid] < queries[i]) {
-                    st = mid + 1;
-                }
-                else {
-                    ed = mid - 1;
-                }
+                if (temp[mid] == queries[i]) flg = true, st = mid + 1;
+                else if (temp[mid] < queries[i]) st = mid + 1;
+                else ed = mid - 1;
             }
             ans[i]=st;
         }
