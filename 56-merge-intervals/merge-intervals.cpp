@@ -1,28 +1,36 @@
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        if (intervals.empty()) return {};
         
-        sort(intervals.begin(), intervals.end(), [](const vector<int>& a, const vector<int>& b) {
-            return a[0] < b[0];
-        });
-        
-        vector<vector<int>> merged;
-        vector<int> currentInterval = intervals[0];
-        
-        for (int i = 1; i < intervals.size(); ++i) {
-            const vector<int>& nextInterval = intervals[i];
-            
-            if (nextInterval[0] <= currentInterval[1]) {
-                currentInterval[1] = max(currentInterval[1], nextInterval[1]);
-            } else {
-                merged.push_back(currentInterval);
-                currentInterval = nextInterval;
-            }
-        }
-        
-        merged.push_back(currentInterval);
-        
-        return merged;
+      if(intervals.size()==1)
+         return intervals;
+      vector<pair<int,int>> p;
+      for(int i=0;i<intervals.size();i++)
+      {
+          p.push_back({intervals[i][0],intervals[i][1]});
+      } 
+      sort(p.begin(),p.end());
+
+      vector<vector<int>> ans;
+      int f=p[0].first,s=p[0].second;
+      for(int i=0;i<p.size()-1;i++)
+      {
+          vector<int> a(2);
+          if(s>=p[i+1].first)
+          {
+              s=max(s,p[i+1].second);
+          }
+          else
+          {
+              a[0]=f;
+              a[1]=s;
+              f=p[i+1].first;
+              s=p[i+1].second;
+              ans.push_back(a);
+          }
+      } 
+      int n=intervals.size();
+      ans.push_back({f,s});
+      return ans;
     }
 };
