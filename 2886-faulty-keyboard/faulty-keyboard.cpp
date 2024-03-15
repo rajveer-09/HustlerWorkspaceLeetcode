@@ -1,13 +1,12 @@
 class Solution {
 public:
     string finalString(string s) {
-        string ans="";
-        for(int i=0;i<s.size();i++){
-            if(s[i]!='i') ans+=s[i];
-            else{
-                reverse(ans.begin(),ans.end());
+        string result="";
+        for( auto i: s){
+          if(i =='i'){
+            reverse(result.begin(), result.end()); 
             }
-        }
-        return ans;
-    }
-};
+          result+=i;
+        } result.erase(  remove(result.begin(), result.end(), 'i')  , result.end()  );
+        return result;
+    }};
