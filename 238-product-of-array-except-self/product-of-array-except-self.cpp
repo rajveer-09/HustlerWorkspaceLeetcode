@@ -19,7 +19,6 @@ public:
         for (int i = 0; i < n; ++i) {
             res[i] = l[i] * r[i];
         }
-
         return res;
     }
 };
