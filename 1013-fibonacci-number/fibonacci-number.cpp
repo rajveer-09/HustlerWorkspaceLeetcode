@@ -1,24 +1,20 @@
-#include <unordered_map>
-
-class Solution {
+class Solution{
 public:
-    int fib(int n) {
-        std::unordered_map<int, int> memo;
-        return fibMemo(n, memo);
-    }
-
-private:
-    int fibMemo(int n, std::unordered_map<int, int>& memo) {
-        if (n == 0) {
-            return 0;
+    int fib(int n){
+        int a=0, b=1;
+        int ans=0;
+        if(n==0){
+            return a;
         }
-        if (n == 1) {
-            return 1;
+        if(n==1){
+            return b;
         }
-        if (memo.find(n) != memo.end()) {
-            return memo[n];
-        }
-        memo[n] = fibMemo(n - 1, memo) + fibMemo(n - 2, memo);
-        return memo[n];
+        for(int i=2;i<=n;i++){
+            int c=a+b;
+            a=b;
+            b=c;
+            ans=c;
+        }   
+        return ans;
     }
 };
