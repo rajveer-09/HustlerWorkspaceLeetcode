@@ -1,20 +1,13 @@
-class Solution{
+class Solution {
 public:
-    int fib(int n){
-        int a=0, b=1;
-        int ans=0;
+
+    int fib(int n) {
         if(n==0){
-            return a;
+            return 0;
         }
-        if(n==1){
-            return b;
+        else if(n==1){
+            return 1;
         }
-        for(int i=2;i<=n;i++){
-            int c=a+b;
-            a=b;
-            b=c;
-            ans=c;
-        }   
-        return ans;
+        return fib(n-1)+fib(n-2);
     }
 };
