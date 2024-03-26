@@ -9,7 +9,6 @@ public:
                 ++smallestPositive;
             }
         }
-        
         return smallestPositive;
     }
 };
