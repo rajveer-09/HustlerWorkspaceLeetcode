@@ -1,17 +1,20 @@
 class Solution {
 public:
     vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
-        
-        vector<int>ans;
-        for (int i =0;i<nums.size();i++){
-            int count=0;
-            for(int j=0;j<nums.size();j++){
-                if (nums[j]<nums[i]){
-                    count++;
-                }
+        vector<int> sortedNums(nums);
+        sort(sortedNums.begin(), sortedNums.end());
+        unordered_map<int, int> counts;
+        for (int i = 0; i < sortedNums.size(); ++i) {
+        // Only set the count for the first occurrence of each number
+            if (counts.find(sortedNums[i]) == counts.end()) {
+                counts[sortedNums[i]] = i;
             }
-            ans.push_back(count);
+        }
+        vector<int> ans;
+        for (int num : nums) {
+        ans.push_back(counts[num]);
         }
         return ans;
     }
+
 };
