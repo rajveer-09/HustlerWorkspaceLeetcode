@@ -1,26 +1,23 @@
 class Solution {
 public:
     int specialArray(vector<int>& nums) {
-        int left = 1, right = nums.size(), result = -1;
+        sort(nums.begin(), nums.end(), greater<int>());
+        int n = nums.size();
         
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            int count = 0;
-            for (int num : nums) {
-                if (num >= mid) {
-                    count++;
-                }
-            }
-            if (count == mid) {
-                result = mid;
-                break;
-            } else if (count < mid) {
-                right = mid - 1;
+        if (nums[n - 1] > n) return n;
+        if (nums[0] == 0) return -1;
+
+        int l = 0, r = n - 1, m = 0;
+        while (l <= r) {
+            m = l + (r - l) / 2;
+            if (nums[m] > m) {
+                l = m + 1;
+            } else if (nums[m] < m) {
+                r = m - 1;
             } else {
-                left = mid + 1;
+                return -1;
             }
         }
-        
-        return result;
+        return nums[m] > m ? m + 1 : m;
     }
 };
