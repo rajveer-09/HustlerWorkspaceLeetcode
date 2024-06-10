@@ -18,6 +18,6 @@ public:
         }
         
         // If dp[amount] is still infinity, it means it's impossible to make the amount
-        return dp[amount] == numeric_limits<int>::max() ? -1 : dp[amount];
+        return dp[amount] == INT_MAX ? -1 : dp[amount];
     }
 };
