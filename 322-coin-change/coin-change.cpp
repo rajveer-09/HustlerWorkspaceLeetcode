@@ -2,7 +2,7 @@ class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
         // Initialize dp vector with size amount + 1 and fill with infinity
-        vector<int> dp(amount + 1, numeric_limits<int>::max());
+        vector<int> dp(amount + 1, INT_MAX);
         
         // Base case: 0 coins needed to make 0 amount
         dp[0] = 0;
