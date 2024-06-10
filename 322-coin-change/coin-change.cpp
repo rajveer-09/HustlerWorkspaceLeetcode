@@ -11,7 +11,7 @@ public:
         for (int coin : coins) {
             // Update dp values for each amount from coin to amount
             for (int i = coin; i <= amount; ++i) {
-                if (dp[i - coin] != numeric_limits<int>::max()) {
+                if (dp[i - coin] != INT_MAX) {
                     dp[i] = min(dp[i], dp[i - coin] + 1);
                 }
             }
