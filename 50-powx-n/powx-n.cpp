@@ -1,30 +1,21 @@
 class Solution {
 public:
-    double fun(double a, int b) {
-        if (a == 0) return 0;
+    double fun(double a, long long b) {
         if (b == 0) return 1;
-        
-        // Handle negative exponents
-        long long t = b;
         if (b < 0) {
-            t = -t;
-            a = 1.0 / a;
+            return 1.0 / fun(a, -b);
         }
         
-        // Efficient power calculation using squaring
-        double result = 1.0;
-        while (t > 0) {
-            if (t % 2 == 1) {
-                result *= a;
-            }
-            a *= a;
-            t /= 2;
+        double half = fun(a, b / 2);
+        if (b % 2 == 0) {
+            return half * half;
+        } else {
+            return half * half * a;
         }
-        
-        return result;
     }
 
     double myPow(double x, int n) {
         return fun(x, n);
     }
 };
+
