@@ -13,22 +13,32 @@ public:
             }
         }
 
-        // Split the paragraph into words
+        // Split the paragraph into words and count their frequencies
+        int n = paragraph.size();
         string word;
-        istringstream stream(paragraph);
-        while (stream >> word) {
-            if (bannedWords.find(word) == bannedWords.end()) {
-                wordCount[word]++;
+        for (int i = 0; i < n; ++i) {
+            if (paragraph[i] == ' ') {
+                if (!word.empty() && bannedWords.find(word) == bannedWords.end()) {
+                    wordCount[word]++;
+                }
+                word.clear();
+            } else {
+                word += paragraph[i];
             }
+        }
+
+        // Check the last word
+        if (!word.empty() && bannedWords.find(word) == bannedWords.end()) {
+            wordCount[word]++;
         }
 
         // Find the word with the maximum frequency
         string mostCommon;
         int maxCount = 0;
-        for (const auto& [word, count] : wordCount) {
-            if (count > maxCount) {
-                maxCount = count;
-                mostCommon = word;
+        for (const auto& entry : wordCount) {
+            if (entry.second > maxCount) {
+                maxCount = entry.second;
+                mostCommon = entry.first;
             }
         }
 
