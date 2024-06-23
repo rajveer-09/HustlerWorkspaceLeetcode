@@ -14,3 +14,10 @@ public:
         return -1;
     }
 };
+
+      static const bool Init = [](){
+    std::ios_base::sync_with_stdio(false);
+    std::cout.tie(nullptr);
+    std::cin.tie(nullptr);
+    return true;
+}();
