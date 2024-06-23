@@ -5,7 +5,6 @@ public:
         vector<int> temp(n * n, 0);
         int p = 0;
 
-        // Fill temp with the rotated elements
         for (int j = 0; j < n; j++) {
             for (int i = n - 1; i >= 0; i--) {
                 temp[p++] = matrix[i][j];
