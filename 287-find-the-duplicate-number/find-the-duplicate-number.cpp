@@ -1,23 +1,16 @@
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        unordered_map<int, int> mp;
-
-        for(int i=0;i<nums.size();i++){
-            mp[nums[i]]++;
+        int n = nums.size();
+        int freq[100001] = {0};
+        for(int i = 0; i <n; i++){
+            if(freq[nums[i]] == 0){
+                freq[nums[i]] += 1;
+            }
+            else{
+                return nums[i];
+            }
         }
-
-        for(auto it : mp){
-            if(it.second >=2) return it.first;
-        }
-
-        return -1;
+        return 0;
     }
 };
-
-      static const bool Init = [](){
-    std::ios_base::sync_with_stdio(false);
-    std::cout.tie(nullptr);
-    std::cin.tie(nullptr);
-    return true;
-}();
