@@ -24,9 +24,9 @@ public:
         //simply take the absolute difference of position and multiply to the ans
         //also take mod at each step
         for(int i = 1; i < vec.size(); i++){
-            ans = ((ans%MOD) * ((vec[i - 1] - vec[i])%MOD)) % MOD;
+            ans = ((ans%MOD) * ((vec[i] - vec[i-1])%MOD)) % MOD;
         }
         
-        return abs(ans % MOD);
+        return ans % MOD;
     }
 };
