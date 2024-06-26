@@ -1,13 +1,18 @@
 class Solution {
 public:
+    Solution(){
+        ios::sync_with_stdio(0);
+        cin.tie(0); cout.tie(0);
+    }
     int totalHammingDistance(vector<int>& nums) {
-        int cnt=0;
-        for(int i=0;i<nums.size()-1;i++){
-            for(int j=i+1;j<nums.size();j++){
-                cnt+= __builtin_popcount(nums[i]^nums[j]);
+        int res = 0, n = nums.size();
+        for(int i = 0 ; i < 32 ; i++){
+            int number_of_bit_1 = 0;
+            for(int num : nums){
+                number_of_bit_1 += (num>>i) & 1; 
             }
+            res += number_of_bit_1 * (n-number_of_bit_1);
         }
-
-        return cnt;
+        return res;
     }
 };
