@@ -1,17 +1,13 @@
 class Solution {
 public:
     int getSum(int a, int b) {
-        if(b>0){
-            while(b--){
-              a++;
-            }
+        int sum = (a ^ b);
+        int carry = (a & b) << 1;
+        while(carry!=0){
+            int temp = sum;
+            sum ^= carry;
+            carry = (carry & temp) << 1;
         }
-        else{
-            b*=-1;
-            while(b--){
-              a--;
-            }
-        }
-        return a;
+        return sum;
     }
 };
