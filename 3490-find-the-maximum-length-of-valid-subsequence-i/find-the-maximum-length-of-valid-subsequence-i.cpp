@@ -1,14 +1,23 @@
 class Solution {
 public:
-    int maximumLength(vector<int> &nums){
-        int length[4] = {0};
-        int Reqd[2] = {0 , 1}; //{Reqd for 01 , 10}
-        for(int num : nums){
-            int newNum = num % 2;
-            length[newNum]++;
-            if(newNum == Reqd[0]) length[2]++ , Reqd[0] ^= 1;
-            if(newNum == Reqd[1]) length[3]++ , Reqd[1] ^= 1;
+    int maximumLength(vector<int>& nums) {
+        int co=0, ce=0, c=0, f=-1;
+        for(auto i:nums){
+            if(i%2){
+                co++;
+                if(f!=1){
+                    c++;
+                    f=1;
+                }
+            }
+            else{
+                ce++;
+                if(f!=0){
+                    c++;
+                    f=0;
+                }
+            }
         }
-        return *max_element(length , length + 4);
+        return max({co, ce, c});
     }
 };
