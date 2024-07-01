@@ -1,29 +1,22 @@
 class Solution {
 public:
     int numberOfPairs(vector<vector<int>>& points) {
-        int maxsum = 0;
-        int n=points.size();
-        for(int i=0;i<n;i++)
-        { for(int j=0;j<n;j++)
-            {
-                if(i==j || points[i][0]>points[j][0] || points[i][1]<points[j][1])
-                {
-                    continue;}
-                int p = 0;
-                for(;p<n;p++)
-                { if(p==i || p==j)
-                    {
-                        continue;
-                    }
-                    if(points[p][1] <= points[i][1] && points[p][1] >= points[j][1] &&
-                     points[p][0] <= points[j][0] && points[p][0] >= points[i][0]) {
-                        break;
-                    } }
-                if(p==n)
-                {
-                    maxsum++;
-                }}
+        sort(begin(points), end(points), [](const auto& a, const auto& b) {
+            return a[0] != b[0] ? a[0] < b[0] : a[1] > b[1];
+        });
+
+        int result = 0;
+        for (int i = 0; i < size(points); ++i) {
+            for (int j = i + 1, y = numeric_limits<int>::min(); j < size(points); ++j) {
+                if (points[i][1] < points[j][1]) {
+                    continue;
+                }
+                if (points[j][1] > y) {
+                    y = points[j][1];
+                    ++result;
+                }
+            }
         }
-        return maxsum;
+        return result;
     }
 };
