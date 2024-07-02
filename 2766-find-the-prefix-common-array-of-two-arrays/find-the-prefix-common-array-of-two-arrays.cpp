@@ -7,15 +7,15 @@ public:
         vector<int>freq(A.size()+1,0); 
         int count=0;
         for(int i=0;i<A.size();i++){
-            freq[A[i]]^=A[i];
-            freq[B[i]]^=B[i];
+            freq[A[i]]++;
+            freq[B[i]]++;
             if(A[i]==B[i]){
                 count++;
             }
             else{
-                if(freq[A[i]]==0) count++;
+                if(freq[A[i]]==2) count++;
                     
-                if(freq[B[i]]==0) count++; 
+                if(freq[B[i]]==2) count++; 
             }
             ans[i]=count;
         }
