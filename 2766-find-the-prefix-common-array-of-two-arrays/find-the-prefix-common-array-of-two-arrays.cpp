@@ -1,26 +1,34 @@
 class Solution {
 public:
     vector<int> findThePrefixCommonArray(vector<int>& A, vector<int>& B) {
-        int n = A.size();
         
-        vector<int> common(n+1,0);
-        
-        for (int i=0;i<n;i++) {
-            common[A[i]] = max(common[A[i]],i);
-            common[B[i]] = max(common[B[i]],i);
-        } 
-        
-        vector<int> ans(n,0);
+        ios::sync_with_stdio(false);
+        cin.tie(0);
+        cout.tie(0);
 
-        for (int i=0;i<n;i++) {
-            ans[common[i+1]]++;
+        vector<int>ans(A.size(),0);
+        ans[0]=0;
+        vector<int>freq(A.size()+1,0); 
+
+        int count=0;
+
+        for(int i=0;i<A.size();i++){
+            
+            freq[A[i]]^=A[i];
+            freq[B[i]]^=B[i];
+            if(A[i]==B[i]){
+                count++;
+            }
+            else{
+                if(freq[A[i]]==0){
+                    count++;
+                }
+                if(freq[B[i]]==0){
+                    count++;
+                }
+            }
+            ans[i]=count;
         }
-        
-        
-        for (int i=1;i<n;i++) {
-            ans[i] += ans[i-1];
-        }
-        
         return ans;
     }
 };
