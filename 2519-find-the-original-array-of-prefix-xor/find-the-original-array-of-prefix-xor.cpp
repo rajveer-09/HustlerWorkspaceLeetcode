@@ -1,6 +1,7 @@
 class Solution {
 public:
     vector<int> findArray(vector<int>& pref) {
+        ios::sync_with_stdio(0);
         int n= pref.size();
         vector<int> ans(n,0);
         ans[0]=pref[0];
