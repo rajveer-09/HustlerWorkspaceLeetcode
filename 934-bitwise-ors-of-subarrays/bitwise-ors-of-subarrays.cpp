@@ -1,28 +1,28 @@
-class Solution {
-public:
-    int subarrayBitwiseORs(vector<int>& inputVector) {
-        vector<int> res;
-    unordered_set<int>ans;
-    int left = 0, right;
-    for (int a : inputVector) {
-        right = res.size();
-        res.push_back(a);
-        for (int i = left; i < right; ++i) {
-            if (res.back() != (res[i] | a)) {
-                res.push_back(res[i] | a);
-            }
-
-        }
-
-        left = right;
-    }
-
-    // Storing the OR values calculated in vector in a set to get the count of distinct values.
-    for (int i = 0; i < res.size(); i++)
+class Solution 
+{
+    public:
+    int subarrayBitwiseORs(vector<int> A) 
     {
-        ans.insert(res[i]);
-    }
-
-    return ans.size();
+        //res will contain all the possible subarray xors
+        vector<int> res;
+        int left = 0, right;
+        
+        //loop through all the elements of the array
+        for (int a: A) 
+        {
+            right = res.size();
+            res.push_back(a);
+            
+            //left will always be at the last element 
+            for (int i = left; i < right; ++i) 
+            {
+                if (res.back() != (res[i] | a)) 
+                    res.push_back(res[i] | a);
+            }
+            
+            left = right;
+        }
+        
+        return set(res.begin(), res.end()).size();
     }
 };
