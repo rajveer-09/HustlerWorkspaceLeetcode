@@ -1,15 +1,21 @@
 class Solution {
 public:
     int findMaxK(vector<int>& nums) {
-        unordered_set<int> num_set(nums.begin(), nums.end());
-        int largest_k = -1;
+        vector<int>ans(2001,0);
+        int result = -1;
 
-        for (int num : nums) {
-            if (num_set.find(-num) != num_set.end()) {
-                largest_k = max(largest_k, abs(num));
+        for(int i=0;i<nums.size();i++){
+            
+            if(ans[-nums[i]+1000]==1){
+                if(abs(nums[i])>=result){
+                    result = abs(nums[i]);
+                }
             }
+            
+            ans[nums[i]+1000] = 1;
         }
 
-        return largest_k != -1 ? largest_k : -1;
+        return result;
+
     }
 };
