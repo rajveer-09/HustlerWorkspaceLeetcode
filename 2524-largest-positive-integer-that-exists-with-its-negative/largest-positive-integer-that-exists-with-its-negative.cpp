@@ -1,13 +1,15 @@
 class Solution {
 public:
-    int findMaxK(std::vector<int>& nums) {
-        std::sort(nums.begin(), nums.end());
-        int n = nums.size();
-        for (int i = n-1; i >= 0; i--) {
-            if (nums[i] > 0 && std::binary_search(nums.begin(), nums.end(), -nums[i])) {
-                return nums[i];
+    int findMaxK(vector<int>& nums) {
+        unordered_set<int> num_set(nums.begin(), nums.end());
+        int largest_k = -1;
+
+        for (int num : nums) {
+            if (num_set.find(-num) != num_set.end()) {
+                largest_k = max(largest_k, abs(num));
             }
         }
-        return -1;  // If no such pair found
+
+        return largest_k != -1 ? largest_k : -1;
     }
 };
