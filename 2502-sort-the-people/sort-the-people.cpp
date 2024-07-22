@@ -1,24 +1,23 @@
 class Solution {
 public:
-    vector<string> sortPeople(vector<string>& names, vector<int>& heights) {
-        size_t n = names.size();
-        
-        for (size_t i{0}; i < n - 1; i++) 
-        {
-            int maxIndex = i;
-            
-            for (size_t j = i + 1; j < n; j++)
-            {
-                if (heights[j] > heights[maxIndex])
-                {
-                    maxIndex = j;
-                }
-            }
-            
-            swap(names[i], names[maxIndex]);
-            swap(heights[i], heights[maxIndex]);
-        }
-        
-        return names;
+    static vector<string> sortPeople(vector<string>& names, vector<int>& heights) {
+        const int n=names.size();
+        vector<pair<int, string>> hn(n);
+        for(int i=0; i<n; i++) 
+            hn[i]={heights[i], names[i]};
+        sort(hn.begin(), hn.end(), greater<>());
+        for(int i=0; i<n; i++) 
+            names[i]=hn[i].second;
+        return names;    
     }
 };
+
+
+
+
+auto init = []() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 'c';
+}();
