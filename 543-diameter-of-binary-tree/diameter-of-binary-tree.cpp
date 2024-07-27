@@ -1,25 +1,32 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
 public:
-    int diameterOfBinaryTree(TreeNode* root) {
-        // Define a helper function to calculate the diameter recursively
-        int res = 0;
-        diameter(root, res);
-        return res;
+    int height(TreeNode* node) {
+        if (!node)
+            return 0;
+        return 1 + max(height(node->left), height(node->right));
     }
 
-private:
-    int diameter(TreeNode* curr, int& res){
-        // Base case: if the current node is null, return 0
-        if (!curr) return 0;
-        
-        // Recursively calculate the diameter of left and right subtrees
-        int left = diameter(curr->left, res);
-        int right = diameter(curr->right, res);
+    int diameterOfBinaryTree(TreeNode* root) {
+        if (!root)
+            return 0;
 
-        // Update the maximum diameter encountered so far
-        res = std::max(res, left + right);
-        
-        // Return the depth of the current node
-        return std::max(left, right) + 1;
+        int rootDiameter = height(root->left) + height(root->right);
+
+        int leftDiameter = diameterOfBinaryTree(root->left);
+
+        int rightDiameter = diameterOfBinaryTree(root->right);
+
+        return max({rootDiameter, leftDiameter, rightDiameter});
     }
 };
