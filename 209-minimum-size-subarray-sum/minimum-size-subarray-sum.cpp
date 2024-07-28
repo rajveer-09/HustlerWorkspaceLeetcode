@@ -16,7 +16,6 @@ public:
                     break;
                 }
             }
-
             if(csum<target) break;
         }
         if(ans==10e5+1) return 0;
