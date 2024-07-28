@@ -1,5 +1,10 @@
 class Solution {
 public:
+Solution() {
+        std::ios_base::sync_with_stdio(false);
+        std::cin.tie(nullptr);
+        std::cout.tie(nullptr);
+    }
     int minSubArrayLen(int target, vector<int>& nums) {
         int ans=10e5+1;
         
