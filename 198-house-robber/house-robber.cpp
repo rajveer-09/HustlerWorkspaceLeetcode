@@ -1,31 +1,21 @@
 class Solution {
 public:
-    int fun(vector<int>& nums , vector<int> &dp){
-        int n= nums.size();
-        dp[n-1]= nums[n-1];
-        dp[n-2]=max(dp[n-1], nums[n-2]);
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 0) return 0;
+        if (n == 1) return nums[0];
         
-        for(int i=n-3;i>=0;i--){
-            
-            if((nums[i]+dp[i+2])>=dp[i+1]){
-                dp[i]=nums[i]+dp[i+2];
-            }
-            else{
-                dp[i]= dp[i+1];
-            }
+        vector<int> dp(n, 0);
+        dp[0] = nums[0];
+        dp[1] = max(nums[0], nums[1]);
 
+        for (int i = 2; i < n; i++) {
+            int x = nums[i] + dp[i - 2];
+            int y = dp[i - 1];
+
+            dp[i] = max(x, y);
         }
 
-        return dp[0];
-
-    }
-    int rob(vector<int>& nums) {
-        int n= nums.size();
-        if(n==1) return nums[0];
-        if(n==2) return max(nums[0], nums[1]);
-
-        vector<int>dp(n, -1);
-        return fun(nums, dp);
+        return dp[n - 1];
     }
 };
-
