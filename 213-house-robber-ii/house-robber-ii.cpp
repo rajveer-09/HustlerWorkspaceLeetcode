@@ -1,38 +1,25 @@
 class Solution {
 public:
-    // Linear house robbing function
-    int robLinear(vector<int>& nums) {
-        int n = nums.size();
-        if (n == 1) return nums[0];
-        if (n == 2) return max(nums[0], nums[1]);
-
-        int prev2 = 0;
-        int prev1 = 0;
-
-        for (int i = 0; i < n; ++i) {
-            int current = max(prev1, prev2 + nums[i]);
-            prev2 = prev1;
-            prev1 = current;
-        }
-
-        return prev1;
-    }
-
-    // Main function to handle circular houses
     int rob(vector<int>& nums) {
         int n = nums.size();
         if (n == 1) return nums[0];
         if (n == 2) return max(nums[0], nums[1]);
 
-        // Pehla se second-to-last tak rob karo
-        vector<int> nums1(nums.begin(), nums.end() - 1);
-        int rob1 = robLinear(nums1);
+        vector<int> dp1(n - 1, 0);
+        vector<int> dp2(n - 1, 0);
 
-        // Second se last tak rob karo
-        vector<int> nums2(nums.begin() + 1, nums.end());
-        int rob2 = robLinear(nums2);
+        dp1[0] = nums[0];
+        dp1[1] = max(nums[0], nums[1]);
+        for (int i = 2; i < n - 1; ++i) {
+            dp1[i] = max(nums[i] + dp1[i - 2], dp1[i - 1]);
+        }
 
-        // Dono ka maximum return karo
-        return max(rob1, rob2);
+        dp2[0] = nums[1];
+        dp2[1] = max(nums[1], nums[2]);
+        for (int i = 2; i < n - 1; ++i) {
+            dp2[i] = max(nums[i + 1] + dp2[i - 2], dp2[i - 1]);
+        }
+
+        return max(dp1[n - 2], dp2[n - 2]);
     }
 };
