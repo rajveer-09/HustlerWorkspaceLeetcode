@@ -7,7 +7,7 @@ public:
         while (i < j) {
             int mid = i + (j - i) / 2;
 
-            if (mid % 2 == 1) {
+            if (mid & 1) {
                 mid--;
             }
 
