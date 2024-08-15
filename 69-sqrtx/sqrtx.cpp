@@ -1,17 +1,21 @@
 class Solution {
 public:
-    int mySqrt(int x) {
-        int low = 0 ;
-        int high = x ;
-        while(low<=high)
-        {
-            long long mid = (low+high)/2;
-            if(mid*mid==x) return mid;
-            else if(mid*mid>x) high = mid-1;
-            else  low = mid +1 ;
-           
+    int mySqrt(int num) {
+        if(num<=1) return num;
+        
+        long long  i = 0, j = num/2;
+
+        while (i <= j) {
+            long long  mid = i + (j - i) / 2;
+
+            if (mid * mid == num) return mid;
+                
+            else if (mid * mid < num) i = mid + 1;
+                
+            else j = mid - 1;    
+
         }
-        // return the lower bound of the number
-        return high;
+
+        return j;
     }
 };
