@@ -1,15 +1,18 @@
 class Solution {
 public:
     int findTheWinner(int n, int k) {
-        return josephus(n, k) + 1; 
-    }
+        queue<int> q;
 
-private:
-    int josephus(int n, int k) {
-        if (n == 1) {
-            return 0; 
-        } else {
-            return (josephus(n - 1, k) + k) % n;
+        for(int i = 1;i<=n;i++) q.push(i);
+
+        while(q.size() > 1){
+            for(int j=1;j<k;j++){
+                q.push(q.front());
+                q.pop();
+            }
+            q.pop();
         }
+
+        return q.front();
     }
 };
