@@ -1,37 +1,19 @@
-#pragma GCC optimize("O3", "unroll-loops")
 class Solution {
 public:
-    bool isIsomorphic(string& s, string& t) {      
-        int n = s.size();
-        // Using size 256  for ASCII characters
-        bitset<256> s_char=0, t_char=0;
-        char st[256]={0};
-        char ts[256]={0};
-        
-        for(int i = 0; i < n; i++) {
-            char cs = s[i], ct = t[i];
-            if(s_char[cs]==0 && t_char[ct]==0) {
-                st[cs]=ct;
-                ts[ct]=cs;
-                s_char[cs]=1;
-                t_char[ct]=1;
+    bool isIsomorphic(string s, string t) {
+        int mp1[256]={0}; 
+        int mp2[256]={0};
+
+        int n=s.length();
+
+        for (int i=0;i<n;i++){
+            if(mp1[s[i]]!=mp2[t[i]]){
+                return false;
             }
-            else {
-                if(st[cs]!=ct || ts[ct]!=cs){
-            //        cout<<"["<<i<<"] wrong mapping with cs="<<cs<<", ct="<<ct<<endl;
-                    return 0;
-                }
-            }
+            mp1[s[i]]=i+1;
+            mp2[t[i]]=i+1;
         }
-        return 1;
+
+        return true;
     }
 };
-
-
-auto init = []()
-{ 
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-    return 'c';
-}();
