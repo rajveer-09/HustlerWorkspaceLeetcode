@@ -1,14 +1,14 @@
 class Solution {
 public:
     bool isGoodArray(vector<int>& nums) {
-        ios_base::sync_with_stdio(0);
-        cin.tie(0);
-        cout.tie(0);
-        int g = 0;
-        for(auto &i: nums){
-            g = __gcd(i,g);
-            if(g==1)return true;
+    
+        int g = nums[0];
+        
+        for(int i = 1 ; i<nums.size(); i++){
+            g = gcd(g, nums[i]);
+            if(g==1) return true;
         }
-        return false;
+
+        return g == 1 ? true : false;
     }
 };
