@@ -1,6 +1,7 @@
 class Solution {
 public:
     int countTriplets(vector<int>& nums) {
+        ios_base::sync_with_stdio(false);
         int n = nums.size();
         int count = 0;
         
@@ -12,7 +13,7 @@ public:
                 pair_and_count[and_result]++;
             }
         }
-        
+
         // Step 2: Count valid triples
         for (int k = 0; k < n; ++k) {
             for (auto& [and_result, freq] : pair_and_count) {
