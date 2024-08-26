@@ -1,58 +1,58 @@
 class Solution {
 public:
-    vector<int> getPrimes(int n) {
-        vector<int> ret;
-        vector<bool> isPrime(n+5, true);
-        for(int i=2; i<=(int)(sqrt(n)); i++) {
-            if(isPrime[i]) for(int j=i*i; j<=n; j+=i) isPrime[j]=false;
+    void primeFreq(int x, unordered_map<int, int> &mp) {
+        for (int i = 2; i * i <= x; i++) {
+            while (x % i == 0) {
+                mp[i] += 1;
+                x /= i;
+            }
         }
-
-        for(int i=2; i<=n; i++) if(isPrime[i]) ret.push_back(i);
-
-        return ret;
+        if (x > 1) {  // If x is a prime number
+            mp[x] += 1;
+        }
     }
 
     int findValidSplit(vector<int>& nums) {
-        vector<int> primes = getPrimes(1000);
-        int n = nums.size();
+        ios_base::sync_with_stdio(false);
 
-        map<int, pair<int,int>> memo1;
-        for(int i=0; i<n; i++) {
-            for(int p: primes) {
-                if(nums[i] % p == 0) {
-                    if(memo1.find(p) == memo1.end()) memo1[p] = make_pair(n,-1);
+        // Global frequency of prime factors
+        unordered_map<int, int> global_freq;
+        vector<unordered_map<int, int>> prime_factors(nums.size());
 
-                    auto& [first, last] = memo1[p];
+        // Calculate prime factor frequencies for each element and overall frequency
+        for (int i = 0; i < nums.size(); i++) {
+            primeFreq(nums[i], prime_factors[i]);
+            for (auto& p : prime_factors[i]) {
+                global_freq[p.first] += p.second;
+            }
+        }
 
-                    first = min(first, i);
-                    last = max(last, i);
+        unordered_map<int, int> left_freq;
+        unordered_map<int, int> active_factors;  // Tracks factors that are still active in the right part
 
-                    while(nums[i] % p == 0) nums[i] /= p;
+        for (int i = 0; i < nums.size() - 1; i++) {  // No need to check the last element
+            for (auto& p : prime_factors[i]) {
+                left_freq[p.first] += p.second;
+                global_freq[p.first] -= p.second;
+                if (global_freq[p.first] == 0) {
+                    global_freq.erase(p.first);
+                } else {
+                    active_factors[p.first] = 1;  // Mark the factor as active on the right side
                 }
             }
 
-            if(nums[i] > 1) {
-                if(memo1.find(nums[i]) == memo1.end()) memo1[nums[i]] = make_pair(n,-1);
-
-                    auto& [first, last] = memo1[nums[i]];
-
-                    first = min(first, i);
-                    last = max(last, i);
+            // Check if any prime factor is still active in the right part
+            bool valid_split = true;
+            for (auto& factor : active_factors) {
+                if (global_freq.count(factor.first)) {
+                    valid_split = false;
+                    break;
+                }
             }
-        }
 
-        map<int,int> memo;
-
-        for(const auto& [_, idxs]: memo1) {
-            memo[idxs.first]+=1;
-            memo[idxs.second]-=1;
-        }
-        
-        int c=0;
-        for(int i=0; i<=n-2; i++) {
-            c += memo[i];
-
-            if(c == 0) return i;
+            if (valid_split) {
+                return i;
+            }
         }
 
         return -1;
