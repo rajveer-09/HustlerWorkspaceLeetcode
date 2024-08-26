@@ -1,78 +1,60 @@
-vector<long long> generatePrimes(long long n) {
-    vector<bool> isPrime(n + 1, true);
-    isPrime[0] = isPrime[1] = false;
-    for (long long i = 2; i * i <= n; ++i) {
-        if (isPrime[i]) {
-            for (long long j = i * i; j <= n; j += i) {
-                isPrime[j] = false;
-            }
-        }
-    }
-    vector<long long> primes;
-    for (long long i = 2; i <= n; ++i) {
-        if (isPrime[i]) {
-            primes.push_back(i);
-        }
-    }
-    return primes;
-}
-
 class Solution {
 public:
+    vector<int> getPrimes(int n) {
+        vector<int> ret;
+        vector<bool> isPrime(n+5, true);
+        for(int i=2; i<=(int)(sqrt(n)); i++) {
+            if(isPrime[i]) for(int j=i*i; j<=n; j+=i) isPrime[j]=false;
+        }
+
+        for(int i=2; i<=n; i++) if(isPrime[i]) ret.push_back(i);
+
+        return ret;
+    }
+
     int findValidSplit(vector<int>& nums) {
-        if (nums.size() <= 1) return -1;
+        vector<int> primes = getPrimes(1000);
+        int n = nums.size();
 
-        unordered_map<long long, long long> minPos, maxPos;
-        vector<long long> primes = generatePrimes(1000);
+        map<int, pair<int,int>> memo1;
+        for(int i=0; i<n; i++) {
+            for(int p: primes) {
+                if(nums[i] % p == 0) {
+                    if(memo1.find(p) == memo1.end()) memo1[p] = make_pair(n,-1);
 
-        auto updateFactorPositions = [&](long long n, long long idx) {
-            for (long long p : primes) {
-                if (p * p > n) break;
-                if (n % p == 0) {
-                    while (n % p == 0) n /= p;
-                    if (minPos.find(p) == minPos.end()) {
-                        minPos[p] = idx;
-                        maxPos[p] = idx;
-                    } else {
-                        maxPos[p] = idx;
-                    }
+                    auto& [first, last] = memo1[p];
+
+                    first = min(first, i);
+                    last = max(last, i);
+
+                    while(nums[i] % p == 0) nums[i] /= p;
                 }
             }
-            if (n > 1) {
-                if (minPos.find(n) == minPos.end()) {
-                    minPos[n] = idx;
-                    maxPos[n] = idx;
-                } else {
-                    maxPos[n] = idx;
-                }
-            }
-        };
 
-        for (long long i = 0; i < nums.size(); ++i) {
-            updateFactorPositions(nums[i], i);
-        }
+            if(nums[i] > 1) {
+                if(memo1.find(nums[i]) == memo1.end()) memo1[nums[i]] = make_pair(n,-1);
 
-        vector<pair<long long, int>> events;
-        for (const auto& [factor, pos] : minPos) {
-            events.push_back({pos, 0});
-            events.push_back({maxPos[factor], 1});
-        }
+                    auto& [first, last] = memo1[nums[i]];
 
-        sort(events.begin(), events.end());
-
-        if (events.empty() || events[0].first != 0) return 0;
-
-        int count = 0;
-        for (const auto& [pos, type] : events) {
-            if (type == 0) {
-                ++count;
-            } else {
-                --count;
-                if (count == 0 && pos + 1 < nums.size()) {
-                    return pos;
-                }
+                    first = min(first, i);
+                    last = max(last, i);
             }
         }
+
+        map<int,int> memo;
+
+        for(const auto& [_, idxs]: memo1) {
+            memo[idxs.first]+=1;
+            memo[idxs.second]-=1;
+        }
+        
+        int c=0;
+        for(int i=0; i<=n-2; i++) {
+            c += memo[i];
+
+            if(c == 0) return i;
+        }
+
         return -1;
     }
 };
