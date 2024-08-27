@@ -1,23 +1,22 @@
 class Solution {
 public:
     int firstMissingPositive(vector<int>& nums) {
+        ios_base::sync_with_stdio(false);
         int n = nums.size();
-        
-        for (int i = 0; i < n; ++i) {
-            if (nums[i] <= 0) {
-                nums[i] = n + 1;
-            }
-        }
+        vector<int> mp(n + 1, 0);
+
         for (int num : nums) {
-            if (abs(num) <= n) {
-                nums[abs(num) - 1] = -abs(nums[abs(num) - 1]);
+            if (num > 0 && num <= n) {
+                mp[num] = 1;
             }
         }
-        for (int i = 0; i < n; ++i) {
-            if (nums[i] > 0) {
-                return i + 1;
+
+        for (int i = 1; i <= n; i++) {
+            if (mp[i] == 0) {
+                return i;
             }
         }
+
         return n + 1;
     }
 };
