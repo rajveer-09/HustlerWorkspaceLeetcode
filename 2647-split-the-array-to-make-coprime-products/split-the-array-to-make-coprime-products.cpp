@@ -19,34 +19,29 @@ public:
 
         // Calculate overall frequency of prime factors
         for (int num : nums) {
-            unordered_map<int, int> temp_freq;
-            primeFreq(num, temp_freq);
-            for (auto& p : temp_freq) {
-                global_freq[p.first] += p.second;
-            }
+            primeFreq(num, global_freq);
         }
 
         unordered_map<int, int> left_freq;
-        unordered_map<int, int> active_factors;  // Tracks factors that are still active in the right part
 
         for (int i = 0; i < nums.size() - 1; i++) {  // No need to check the last element
             unordered_map<int, int> temp_freq;
             primeFreq(nums[i], temp_freq);
 
+            // Move prime factors from right to left
             for (auto& p : temp_freq) {
                 left_freq[p.first] += p.second;
                 global_freq[p.first] -= p.second;
+
                 if (global_freq[p.first] == 0) {
                     global_freq.erase(p.first);
-                } else {
-                    active_factors[p.first] = 1;  // Mark the factor as active on the right side
                 }
             }
 
-            // Check if any prime factor is still active in the right part
+            // Check if left and right are coprime
             bool valid_split = true;
-            for (auto& factor : active_factors) {
-                if (global_freq.count(factor.first)) {
+            for (auto& p : left_freq) {
+                if (global_freq.count(p.first)) {
                     valid_split = false;
                     break;
                 }
