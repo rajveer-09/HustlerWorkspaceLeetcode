@@ -15,14 +15,13 @@ public:
     int findValidSplit(vector<int>& nums) {
         ios_base::sync_with_stdio(false);
 
-        // Global frequency of prime factors
         unordered_map<int, int> global_freq;
-        vector<unordered_map<int, int>> prime_factors(nums.size());
 
-        // Calculate prime factor frequencies for each element and overall frequency
-        for (int i = 0; i < nums.size(); i++) {
-            primeFreq(nums[i], prime_factors[i]);
-            for (auto& p : prime_factors[i]) {
+        // Calculate overall frequency of prime factors
+        for (int num : nums) {
+            unordered_map<int, int> temp_freq;
+            primeFreq(num, temp_freq);
+            for (auto& p : temp_freq) {
                 global_freq[p.first] += p.second;
             }
         }
@@ -31,7 +30,10 @@ public:
         unordered_map<int, int> active_factors;  // Tracks factors that are still active in the right part
 
         for (int i = 0; i < nums.size() - 1; i++) {  // No need to check the last element
-            for (auto& p : prime_factors[i]) {
+            unordered_map<int, int> temp_freq;
+            primeFreq(nums[i], temp_freq);
+
+            for (auto& p : temp_freq) {
                 left_freq[p.first] += p.second;
                 global_freq[p.first] -= p.second;
                 if (global_freq[p.first] == 0) {
