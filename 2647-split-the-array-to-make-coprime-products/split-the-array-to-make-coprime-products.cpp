@@ -21,6 +21,7 @@ public:
     }
 
     int findValidSplit(vector<int>& nums) {
+        ios_base::sync_with_stdio(false);
         int max_num = *max_element(nums.begin(), nums.end());
         vector<int> spf = sieve(max_num);
 
