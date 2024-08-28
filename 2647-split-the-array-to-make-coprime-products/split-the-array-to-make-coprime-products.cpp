@@ -11,7 +11,6 @@ public:
             mp[x]++;
         }
     }
-
     int findValidSplit(vector<int>& nums) {
         ios_base::sync_with_stdio(false);
 
@@ -24,7 +23,6 @@ public:
                 global[p.first] += p.second;
             }
         }
-
         unordered_map<int, int> left;
         unordered_map<int, int> active;
 
