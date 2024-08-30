@@ -11,6 +11,7 @@ private:
 
 public:
     int findCircleNum(vector<vector<int>> &adj) {
+        ios_base::sync_with_stdio(false);
         int V = adj.size();
         vector<int> adjLs[V];
         for (int i = 0; i < V; i++) {
