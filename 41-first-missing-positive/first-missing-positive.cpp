@@ -1,27 +1,27 @@
 class Solution {
 public:
+    Solution() {
+        ios_base::sync_with_stdio(false);
+        cin.tie(nullptr);
+    }
     int firstMissingPositive(vector<int>& arr) {
         int n = arr.size();
 
-        sort(arr.begin(), arr.end());
-
-        int target = 1;
-
+        // Place each number in its correct position
         for (int i = 0; i < n; i++) {
-
-            if (arr[i] <= 0) {
-                continue;
-            }
-
-            if (arr[i] == target) {
-                target++;
-            }
-
-            else if (arr[i] > target) {
-                return target;
+            while (arr[i] > 0 && arr[i] <= n && arr[arr[i] - 1] != arr[i]) {
+                swap(arr[i], arr[arr[i] - 1]);
             }
         }
 
-        return target;
+        // Find the first missing positive integer
+        for (int i = 0; i < n; i++) {
+            if (arr[i] != i + 1) {
+                return i + 1;
+            }
+        }
+
+        // If all positions are correct, return n + 1
+        return n + 1;
     }
 };
