@@ -1,6 +1,8 @@
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
+        ios_base::sync_with_stdio(false);
+        
         int ans = INT_MIN;
 
         int csum = 0;
