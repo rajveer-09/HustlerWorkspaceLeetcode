@@ -1,3 +1,14 @@
+#pragma GCC target("tune=native")
+#pragma GCC optimize("Ofast")
+//#pragma GCC optimize("Os")
+// Code here is optimized for size
+
+static const auto fastIO = []() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+    return 0;
+}();
 class Solution {
 public:
     int thirdMax(vector<int>& nums) {
