@@ -9,24 +9,22 @@ static const auto fastIO = []() {
     std::cout.tie(nullptr);
     return 0;
 }();
+
 class Solution {
 public:
     int thirdMax(vector<int>& nums) {
-        set<int> st;
-
-        for(auto it : nums) st.insert(it);
-
-        int n = st.size();
-
-        if(n < 3){
-            auto it = st.begin();
-            advance(it, n-1);
-            return *it;
+        long long int first =LONG_MIN;
+        long long int second =LONG_MIN;
+        long long int third =LONG_MIN;
+        
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]<=third || nums[i]==second || nums[i]==first)
+                continue;
+            third=nums[i];
+            if(third>second) swap(third,second);
+            if(second>first) swap(second,first);
         }
-
-        auto it = st.begin();
-        advance(it, n-3);
-
-        return *it ;
+        if(third==LONG_MIN) return first;
+        else return third;
     }
 };
