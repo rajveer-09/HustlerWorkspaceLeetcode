@@ -1,18 +1,7 @@
-#pragma GCC target("tune=native")
-#pragma GCC optimize("Ofast")
-//#pragma GCC optimize("Os")
-// Code here is optimized for size
-
-static const auto fastIO = []() {
-    std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-    std::cout.tie(nullptr);
-    return 0;
-}();
-
 class Solution {
 public:
     int findMin(vector<int>& arr) {
+        ios_base::sync_with_stdio(false);
         int low = 0, high = arr.size() - 1;
         int ans = INT_MAX;
 
