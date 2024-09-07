@@ -1,6 +1,7 @@
 class Solution {
 public:
     int findPeakElement(vector<int>& arr) {
+        ios_base::sync_with_stdio(false);
         int n = arr.size();
         
         if (n == 1) return 0;
