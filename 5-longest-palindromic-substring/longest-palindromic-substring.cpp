@@ -1,6 +1,7 @@
 class Solution {
 public:
     string longestPalindrome(string s) {
+        ios_base::sync_with_stdio(false);
         int len = s.length();
         if (len < 2) {
             return s;
