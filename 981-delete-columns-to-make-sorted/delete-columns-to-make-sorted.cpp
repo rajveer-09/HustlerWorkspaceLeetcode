@@ -1,26 +1,23 @@
 class Solution {
 public:
     int minDeletionSize(vector<string>& strs) {
-      ios_base::sync_with_stdio(false);
-      int count=0;
-      for(int i=0;i<strs[0].size();i++)
-      {
-        vector<int>v;
-        for(int j=0;j<strs.size();j++)
-        {
-            v.push_back(strs[j][i]-'a');
-        }
-        vector<int>v1=v;
-        sort(v1.begin(),v1.end());
-        for(int k=0;k<v.size();k++)
-        {
-            if(v1[k]!=v[k])
-            {
-                count++;
-                break;
+        int m = strs.size(), n = strs[0].size(), ans = 0;
+        for (int i=0; i<n; i++) {
+            #pragma unroll
+            for (int j=1; j<m; j++) {
+                if (strs[j][i] < strs[j-1][i]) {
+                    ans++;
+                    break;
+                }
             }
         }
-      }  
-      return count;
+        return ans;
     }
 };
+
+auto boom = [](){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    return 0;
+}();
