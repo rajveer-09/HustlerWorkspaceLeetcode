@@ -15,6 +15,7 @@ public:
     }
     int smallestDivisor(vector<int>& nums, int h){
         // Code Here
+        ios_base::sync_with_stdio(false);
         int ans = INT_MAX;
 
         int i = 1, j = *max_element(nums.begin(), nums.end());
