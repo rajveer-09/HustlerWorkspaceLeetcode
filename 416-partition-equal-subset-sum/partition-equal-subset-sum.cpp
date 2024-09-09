@@ -13,6 +13,7 @@ public:
         return dp[sum][idx] = (inc || exc);
     }
     bool canPartition(vector<int>& arr) {
+        ios_base::sync_with_stdio(false);
         int sum = accumulate(arr.begin(), arr.end(), 0);
         if(sum %2 !=0) return false;
         else sum = sum/2;
