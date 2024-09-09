@@ -1,64 +1,41 @@
 class Solution {
 public:
-    double findMedianSortedArrays(vector<int>& a, vector<int>& b) {
-        ios_base::sync_with_stdio(false);
-        int n1 = a.size(), n2 = b.size();
-        int n = n1 + n2; // total size
-        // required indices:
-        int ind2 = n / 2;
-        int ind1 = ind2 - 1;
-        int cnt = 0;
-        int ind1el = -1, ind2el = -1;
-
-        // apply the merge step:
-        int i = 0, j = 0;
-        while (i < n1 && j < n2) {
-            if (a[i] < b[j]) {
-                if (cnt == ind1)
-                    ind1el = a[i];
-                if (cnt == ind2)
-                    ind2el = a[i];
-                cnt++;
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int m= nums1.size();
+        int n= nums2.size();
+        vector<int> merged(m + n);
+        int i=0,j=0,k=0;
+        while(i<m&&j<n){
+            if(nums1[i]<nums2[j]){
+                merged[k]=nums1[i];
                 i++;
-            } else {
-                if (cnt == ind1)
-                    ind1el = b[j];
-                if (cnt == ind2)
-                    ind2el = b[j];
-                cnt++;
+            }
+            else{
+                merged[k]=nums2[j];
                 j++;
             }
-            if (ind1el != -1 && ind2el != -1)
-                break;
+            k++;
         }
-
-        // copy the left-out elements:
-        while (i < n1) {
-            if (cnt == ind1)
-                ind1el = a[i];
-            if (cnt == ind2)
-                ind2el = a[i];
-            cnt++;
+        while(i<m){
+            merged[k]=nums1[i];
             i++;
-            if (ind1el != -1 && ind2el != -1)
-                break;
+            k++;
+
         }
-        while (j < n2) {
-            if (cnt == ind1)
-                ind1el = b[j];
-            if (cnt == ind2)
-                ind2el = b[j];
-            cnt++;
+        while(j<n){
+            merged[k]=nums2[j];
             j++;
-            if (ind1el != -1 && ind2el != -1)
-                break;
-        }
+            k++;
 
-        // Find the median:
-        if (n % 2 == 1) {
-            return (double)ind2el;
         }
-
-        return (double)((double)(ind1el + ind2el)) / 2.0;
+        if((m+n)%2!=0){
+            return merged[(m+n)/2];
+        }
+        else{
+            int x=(m+n)/2;
+            double p=merged[x];
+            double q=merged[x-1];
+            return (p+q)/2;
+        }
     }
 };
