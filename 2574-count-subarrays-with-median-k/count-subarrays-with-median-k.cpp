@@ -1,6 +1,7 @@
 class Solution {
 public:
     int countSubarrays(vector<int>& nums, int k) {
+        ios_base::sync_with_stdio(false);
         int n = nums.size(), s = 0, ans = 0;
         bool flg = false;
         unordered_map<int, int> mp;
