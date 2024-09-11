@@ -1,30 +1,22 @@
 class Solution {
 public:
-    int optimalBinarySearch(vector<int>& nums)
-    {
-        if(nums.size() == 0) return 0;
+    int lengthOfLIS(vector<int>& nums) {
+        ios_base::sync_with_stdio(false);
+        int n = nums.size();
+        vector<int> dp(n, 1);
 
-        vector<int> ans;
-        ans.push_back(nums[0]);
-
-        for(int i = 1; i < nums.size(); i++)
-        {
-            if(nums[i] > ans.back())
-                ans.push_back(nums[i]);
-            else
-            {
-                // overwrite the previous just big element
-                int index = lower_bound(ans.begin(),ans.end(),nums[i]) - ans.begin();
-                ans[index] = nums[i];
+        for (int i = 1; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
             }
         }
-        return ans.size();
-    }
 
-    int lengthOfLIS(vector<int>& nums) {
-        int curr = 0;
-        int prev = -1;
-        
-        return optimalBinarySearch(nums);
+        int maxLen = 0;
+        for (int len : dp) {
+            maxLen = max(maxLen, len);
+        }
+        return maxLen;
     }
 };
