@@ -1,22 +1,24 @@
 class Solution {
 public:
+    int memo(vector<int>& nums, int idx, int prev, vector<vector<int>> &dp) {
+        if (idx < 0) return 0;
+
+        if (dp[idx][prev + 1] != -1) return dp[idx][prev + 1];
+
+        int inc = 0;
+        if (prev == -1 || nums[prev] > nums[idx]) {
+            inc = 1 + memo(nums, idx - 1, idx, dp);
+        }
+
+        int exc = memo(nums, idx - 1, prev, dp);
+
+        return dp[idx][prev + 1] = max(inc, exc);
+    }
+
     int lengthOfLIS(vector<int>& nums) {
-        ios_base::sync_with_stdio(false);
         int n = nums.size();
-        vector<int> dp(n, 1);
+        vector<vector<int>> dp(n, vector<int>(n + 1, -1));
 
-        for (int i = 1; i < n; ++i) {
-            for (int j = 0; j < i; ++j) {
-                if (nums[j] < nums[i]) {
-                    dp[i] = max(dp[i], dp[j] + 1);
-                }
-            }
-        }
-
-        int maxLen = 0;
-        for (int len : dp) {
-            maxLen = max(maxLen, len);
-        }
-        return maxLen;
+        return memo(nums, n - 1, -1, dp);
     }
 };
