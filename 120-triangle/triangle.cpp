@@ -5,7 +5,7 @@ public:
 
         if (i == n - 1) return triangle[i][j]; 
 
-        if(dp[i][j] != -1) return dp[i][j];
+        if(dp[i][j] != INT_MAX) return dp[i][j];
 
         int down = triangle[i][j] + func(i + 1, j, triangle, dp);
 
@@ -16,7 +16,7 @@ public:
     int minimumTotal(vector<vector<int>>& triangle) {
         ios_base::sync_with_stdio(false);
         int n = triangle.size();
-        vector<vector<int> > dp(n, vector<int>(n, -1));
+        vector<vector<int> > dp(n, vector<int>(n, INT_MAX));
         return func(0, 0, triangle, dp);
     }
 };
