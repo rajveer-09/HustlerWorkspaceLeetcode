@@ -9,7 +9,8 @@ public:
                 if (num <= i) {
                     // Check for potential overflow before updating dp[i]
                     if (dp[i] > INT_MAX - dp[i - num]) {
-                        // If overflow is detected, set dp[i] to a value that signifies an invalid state
+                        /* If overflow is detected, set dp[i] to a
+                         value that signifies an invalid state */
                         dp[i] = INT_MAX;
                     } 
                     else {
