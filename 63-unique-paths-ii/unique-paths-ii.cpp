@@ -1,38 +1,36 @@
 class Solution {
-private:
-    int func(int i, int j, vector<vector<int>>& matrix, vector<vector<int>> &dp) {
-        // If the current cell has an obstacle, return 0
-        if (i >= 0 && j >= 0 && matrix[i][j] == 1) return 0;
+public:
+    int memo(vector<vector<int>>& matrix, int idx, int col, vector<vector<int>>& dp) {
+        int n = matrix.size();
+        int m = matrix[0].size();
 
-        // If we're out of bounds, return 0
-        if (i < 0 || j < 0) return 0;
+        // Base case: if we reach the bottom-right corner
+        if (idx == n - 1 && col == m - 1) {
+            return matrix[idx][col] == 1 ? 0 : 1;
+        }
 
-        // Base case: if we're at the start, and there's no obstacle, return 1
-        if (i == 0 && j == 0) return 1;
+        // If out of bounds or on an obstacle
+        if (idx >= n || col >= m || matrix[idx][col] == 1) {
+            return 0;
+        }
 
-        // If the result is already computed, return it
-        if (dp[i][j] != -1) return dp[i][j];
+        if (dp[idx][col] != -1) {
+            return dp[idx][col];
+        }
 
-        // Calculate the number of ways by moving up and left recursively
-        int up = func(i - 1, j, matrix, dp);
-        int left = func(i, j - 1, matrix, dp);
+        int right = memo(matrix, idx, col + 1, dp);
+        int down = memo(matrix, idx + 1, col, dp);
 
-        // Return and store the total number of ways in the DP table
-        return dp[i][j] = up + left;
+        return dp[idx][col] = right + down;
     }
 
-public:
     int uniquePathsWithObstacles(vector<vector<int>>& matrix) {
-        int m = matrix.size();
-        int n = matrix[0].size();
-        
-        // If the start or the end is an obstacle, return 0
-        if (matrix[0][0] == 1 || matrix[m-1][n-1] == 1) return 0;
+        ios_base::sync_with_stdio(false);
+        int n = matrix.size();
+        int m = matrix[0].size();
 
-        // Initialize DP table to memoize results
-        vector<vector<int>> dp(m, vector<int>(n, -1)); 
-        
-        // Return the total number of paths
-        return func(m-1, n-1, matrix, dp);
+        vector<vector<int>> dp(n, vector<int>(m, -1));
+
+        return memo(matrix, 0, 0, dp);
     }
 };
