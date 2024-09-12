@@ -12,6 +12,6 @@ public:
             }
         }
 
-        return dp[target] > INT_MAX ? -1 : static_cast<int>(dp[target]);
+        return dp[target];
     }
 };
