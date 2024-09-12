@@ -2,15 +2,15 @@ class Solution {
 public:
     int maxCount(int m, int n, vector<vector<int>>& ops) {
         ios_base::sync_with_stdio(false);
-        int opsLen = ops.size();
-
-        if (opsLen == 0) return m * n;
-        int miR = m, miC = n;
-        for (int i = 0; i < opsLen; i++) {
-            miR = min(miR, ops[i][0]);
-            miC = min(miC, ops[i][1]);
+        int size = ops.size();
+        for(int i=0;i<size;i++){
+            if(m>ops[i][0]){
+                m = ops[i][0];
+            }
+            if(n>ops[i][1]){
+                n = ops[i][1];
+            }
         }
-
-        return miR * miC;
+        return m*n;
     }
 };
