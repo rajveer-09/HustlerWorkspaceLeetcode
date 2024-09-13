@@ -19,6 +19,7 @@ public:
         solve(root->right, targetSum, path, ans, sum);
     }
     vector<vector<int>> pathSum(TreeNode *root, int targetSum){
+        ios_base::sync_with_stdio(false);
         int sum = 0;
         vector<int> ans;
         vector<vector<int>> path;
