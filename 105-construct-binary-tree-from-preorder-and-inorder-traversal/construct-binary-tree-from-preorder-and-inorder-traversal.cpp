@@ -1,6 +1,6 @@
 class Solution {
 public:
-    TreeNode* solve(vector<int>& pre, int ps, int pe, vector<int>& in, int is, int ie, map<int, int>& mp) {
+    TreeNode* solve(vector<int>& pre, int ps, int pe, vector<int>& in, int is, int ie, unordered_map<int, int>& mp) {
 
         if (ps > pe || is > ie) return nullptr;
 
@@ -16,7 +16,7 @@ public:
 
     TreeNode* buildTree(vector<int>& pre, vector<int>& in) {
         ios_base::sync_with_stdio(false);
-        map<int, int> mp;
+        unordered_map<int, int> mp;
         for (int i = 0; i < in.size(); ++i) {
             mp[in[i]] = i;
         }
