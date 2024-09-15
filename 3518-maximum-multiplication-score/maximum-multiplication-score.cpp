@@ -5,8 +5,8 @@ public:
         int m = b.size();
 
         if(bdx == n) return 0;
-        
-        if (bdx >= n || idx >= m) return -1e11; 
+
+        if (bdx > n || idx >= m) return -1e11; 
 
         if (dp[idx][bdx] != -1e12) return dp[idx][bdx];
 
@@ -18,6 +18,7 @@ public:
     }
 
     long long maxScore(vector<int>& a, vector<int>& b) {
+        ios_base::sync_with_stdio(false);
         int n = a.size();
         int m = b.size();
 
