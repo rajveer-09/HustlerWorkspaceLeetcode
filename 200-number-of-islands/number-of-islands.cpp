@@ -1,33 +1,52 @@
 class Solution {
 public:
-    int numIslands(vector<vector<char>>& grid) {
-        if (grid.empty() || grid[0].empty()) {
-            return 0;
-        }
-        
-        int numIslands = 0;
-        for (int i = 0; i < grid.size(); i++) {
-            for (int j = 0; j < grid[0].size(); j++) {
-                if (grid[i][j] == '1') {
-                    numIslands++;
-                    dfs(grid, i, j);
+    void bfs(vector<vector<char>> &grid, int i, int j, vector<vector<bool>>& visited) {
+        int n = grid.size();
+        int m = grid[0].size();
+
+        queue<pair<int, int>> q;
+        q.push({i, j});
+        visited[i][j] = true;
+
+        while (!q.empty()) {
+            int x = q.front().first;
+            int y = q.front().second;
+            q.pop();
+
+            // Directions for moving up, down, left, and right
+            vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+            for (auto dir : directions) {
+                int xx = x + dir.first;
+                int yy = y + dir.second;
+
+                if (xx >= 0 && xx < n && yy >= 0 && yy < m) {
+                    if (!visited[xx][yy] && grid[xx][yy] == '1') {
+                        q.push({xx, yy});
+                        visited[xx][yy] = true;
+                    }
                 }
             }
         }
-        
-        return numIslands;
     }
-    
-private:
-    void dfs(vector<vector<char>>& grid, int i, int j) {
-        if (i < 0 || i >= grid.size() || j < 0 || j >= grid[0].size() || grid[i][j] != '1') {
-            return;
+
+    int numIslands(vector<vector<char>> &grid) {
+        ios_base::sync_with_stdio(false);
+        int n = grid.size();
+        int m = grid[0].size();
+
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+        int cnt = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (!visited[i][j] && grid[i][j] == '1') {
+                    cnt++;
+                    bfs(grid, i, j, visited);
+                }
+            }
         }
-        
-        grid[i][j] = '0'; // mark as visited
-        dfs(grid, i + 1, j); // down
-        dfs(grid, i - 1, j); // up
-        dfs(grid, i, j + 1); // right
-        dfs(grid, i, j - 1); // left
+
+        return cnt;
     }
 };
