@@ -1,3 +1,11 @@
+#pragma GCC optimize("O3,unroll-loops")
+
+static const bool Booster = [](){
+    std::ios_base::sync_with_stdio(false);
+    std::cout.tie(nullptr);
+    std::cin.tie(nullptr);
+    return true;
+}();
 class Solution {
 public:
     void bfs(vector<vector<char>> &grid, int i, int j, vector<vector<bool>>& visited) {
