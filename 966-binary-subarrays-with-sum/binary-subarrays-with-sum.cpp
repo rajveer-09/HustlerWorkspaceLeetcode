@@ -1,18 +1,25 @@
 class Solution {
 public:
     int numSubarraysWithSum(vector<int>& nums, int goal) {
-        return atMost(nums, goal) - atMost(nums, goal-1);
-    }
-    int atMost(vector<int>& nums, int goal){
-        int head, tail = 0, sum = 0, result = 0;
-        for (head = 0; head < nums.size(); head++) {
-            sum += nums[head];
-            while (sum > goal && tail <= head) {
-                sum -= nums[tail];
-                tail++;
+        unordered_map<int, int> prefixSumCount;
+        int prefixSum = 0;
+        int result = 0;
+        
+        // Initialize the map with prefix sum 0 having one occurrence.
+        prefixSumCount[0] = 1;
+        
+        for (int num : nums) {
+            prefixSum += num;
+            
+            // If there exists a prefix sum that when subtracted from the current prefix sum gives the goal
+            if (prefixSumCount.find(prefixSum - goal) != prefixSumCount.end()) {
+                result += prefixSumCount[prefixSum - goal];
             }
-            result += head - tail + 1;
+            
+            // Update the frequency of the current prefix sum in the map
+            prefixSumCount[prefixSum]++;
         }
+        
         return result;
     }
 };
