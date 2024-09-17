@@ -1,25 +1,38 @@
 class Solution {
 public:
     int numSubarraysWithSum(vector<int>& nums, int goal) {
-        unordered_map<int, int> prefixSumCount;
-        int prefixSum = 0;
-        int result = 0;
-        
-        // Initialize the map with prefix sum 0 having one occurrence.
-        prefixSumCount[0] = 1;
-        
-        for (int num : nums) {
-            prefixSum += num;
+        int n = nums.size();
+        int count = 0;
+        int left = 0;
+        int right = 0;
+        int currentSum = 0;
+
+        while (right < n) {
+            // Add the current element to the currentSum
+            currentSum += nums[right];
             
-            // If there exists a prefix sum that when subtracted from the current prefix sum gives the goal
-            if (prefixSumCount.find(prefixSum - goal) != prefixSumCount.end()) {
-                result += prefixSumCount[prefixSum - goal];
+            // Move the left pointer to shrink the window if necessary
+            while (left <= right && currentSum > goal) {
+                currentSum -= nums[left];
+                left++;
             }
-            
-            // Update the frequency of the current prefix sum in the map
-            prefixSumCount[prefixSum]++;
+
+            // If the current sum equals the goal, count the number of subarrays
+            if (currentSum == goal) {
+                // Count subarrays starting from each index from left to right
+                int tempLeft = left;
+                while (tempLeft <= right && currentSum == goal) {
+                    count++;
+                    currentSum -= nums[tempLeft];
+                    tempLeft++;
+                }
+                currentSum = goal; // Restore the current sum for the next iteration
+            }
+
+            // Move the right pointer to expand the window
+            right++;
         }
-        
-        return result;
+
+        return count;
     }
 };
