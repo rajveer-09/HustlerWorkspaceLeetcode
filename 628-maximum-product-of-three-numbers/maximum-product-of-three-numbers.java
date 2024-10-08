@@ -1,3 +1,4 @@
+
 class Solution {
     public int maximumProduct(int[] A) {
         int n = A.length;
@@ -13,3 +14,7 @@ class Solution {
         return (int) Math.max(a * b * c, c * d * e);
     }
 }
+
+
+
+
