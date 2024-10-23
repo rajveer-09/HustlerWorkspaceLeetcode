@@ -1,44 +1,42 @@
+import java.util.ArrayList;
+import java.util.List;
+
 class Solution {
     public List<Integer> luckyNumbers(int[][] matrix) {
         List<Integer> luckyNumbers = new ArrayList<>();
-        
         int[] rowMins = new int[matrix.length];
         
+        // Find the minimum element in each row
         for (int i = 0; i < matrix.length; i++) {
-            int min = matrix[i][0]; 
-            for (int j = 1; j < matrix[i].length; j++) {
+            int min = Integer.MAX_VALUE;
+            for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] < min) {
                     min = matrix[i][j];
                 }
             }
-            rowMins[i] = min; 
+            rowMins[i] = min;
         }
         
+        // Check if the row minimum is the maximum in its column
         for (int i = 0; i < matrix.length; i++) {
-            int minValue = rowMins[i];
-         
-            int colIndex = -1;
+            int min = rowMins[i];
             for (int j = 0; j < matrix[i].length; j++) {
-                if (matrix[i][j] == minValue) {
-                    colIndex = j;
+                if (matrix[i][j] == min) {
+                    boolean isMaxInColumn = true;
+                    for (int k = 0; k < matrix.length; k++) {
+                        if (matrix[k][j] > min) {
+                            isMaxInColumn = false;
+                            break;
+                        }
+                    }
+                    if (isMaxInColumn) {
+                        luckyNumbers.add(min);
+                    }
                     break;
                 }
-            }
-           
-            boolean isMaxInColumn = true;
-            for (int k = 0; k < matrix.length; k++) {
-                if (matrix[k][colIndex] > minValue) {
-                    isMaxInColumn = false;
-                    break;
-                }
-            }
-            
-            if (isMaxInColumn) {
-                luckyNumbers.add(minValue);
             }
         }
         
         return luckyNumbers;
     }
-    
 }
