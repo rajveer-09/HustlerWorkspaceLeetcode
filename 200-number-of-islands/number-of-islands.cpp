@@ -1,54 +1,13 @@
-#pragma GCC optimize("O3,unroll-loops")
-
-static const bool Booster = [](){
-    std::ios_base::sync_with_stdio(false);
-    std::cout.tie(nullptr);
-    std::cin.tie(nullptr);
-    return true;
-}();
-class Solution {
+class Solution{
 public:
-    void bfs(vector<vector<char>> &grid, int i, int j, vector<vector<bool>>& visited) {
-        int n = grid.size();
-        int m = grid[0].size();
-
-        queue<pair<int, int>> q;
-        q.push({i, j});
-        visited[i][j] = true;
-
-        while (!q.empty()) {
-            int x = q.front().first;
-            int y = q.front().second;
-            q.pop();
-
-            // Directions for moving up, down, left, and right
-            vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-
-            for (auto dir : directions) {
-                int xx = x + dir.first;
-                int yy = y + dir.second;
-
-                if (xx >= 0 && xx < n && yy >= 0 && yy < m) {
-                    if (!visited[xx][yy] && grid[xx][yy] == '1') {
-                        q.push({xx, yy});
-                        visited[xx][yy] = true;
-                    }
-                }
-            }
-        }
-    }
-
-    int numIslands(vector<vector<char>> &grid) {
-        ios_base::sync_with_stdio(false);
-        int n = grid.size();
-        int m = grid[0].size();
-
-        vector<vector<bool>> visited(n, vector<bool>(m, false));
+    int numIslands(vector<vector<char>> &grid){
         int cnt = 0;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (!visited[i][j] && grid[i][j] == '1') {
+        vector<vector<bool>> visited(grid.size(), vector<bool> (grid[0].size(), false));
+
+        for(int i = 0 ; i < grid.size(); i++){
+            for(int j = 0; j < grid[0].size(); j++){
+                if(!visited[i][j] && grid[i][j] == '1'){
                     cnt++;
                     bfs(grid, i, j, visited);
                 }
@@ -56,5 +15,36 @@ public:
         }
 
         return cnt;
+    }
+private:
+    void bfs(vector<vector<char>>& grid, int i, int j, vector<vector<bool>>& visited){
+        int n = grid.size();
+        int m = grid[0].size();
+
+        queue<pair<int, int>> q;
+
+        q.push({i, j});
+        visited[i][j] = true;
+
+        while(!q.empty()){
+            auto p = q.front();
+            int x = p.first;
+            int y = p.second;
+            q.pop();
+
+            vector<pair<int, int>> dir = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+            for(auto it : dir){
+                int xx = x + it.first;
+                int yy = y + it.second;
+
+                if(xx >= 0 && xx < n && yy >= 0 && yy < m){
+                    if(!visited[xx][yy] && grid[xx][yy] == '1'){
+                        q.push({xx, yy});
+                        visited[xx][yy] = true;
+                    }
+                }
+            }
+        }
     }
 };
