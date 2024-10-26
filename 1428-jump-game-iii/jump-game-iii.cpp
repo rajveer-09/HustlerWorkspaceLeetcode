@@ -11,8 +11,8 @@ public:
         
         dp[index] = 0;
 
-        bool left = (index - arr[index] >= 0) && solve(arr, index - arr[index], dp);
-        bool right = (index + arr[index] < arr.size()) && solve(arr, index + arr[index], dp);
+        bool left =  solve(arr, index - arr[index], dp);
+        bool right =  solve(arr, index + arr[index], dp);
 
         return dp[index] = (left || right);
     }
