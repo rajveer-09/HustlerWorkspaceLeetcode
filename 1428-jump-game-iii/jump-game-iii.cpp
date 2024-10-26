@@ -1,25 +1,24 @@
 class Solution {
 public:
-    bool dfs(vector<int>& arr, int index, vector<bool>& visited) {
-        // Base case: Check if we reached a zero
-        if (arr[index] == 0) return true;
+    bool solve (vector<int>& arr, int index, vector<int>& dp) {
 
-        // If already visited, return false
-        if (visited[index]) return false;
+        if(index >= arr.size()) return false;
 
-        // Mark the index as visited
-        visited[index] = true;
+        if (dp[index] != -1) return dp[index];
+        
+        if (arr[index] == 0) return dp[index] = true;
 
-        // Jump left and right with boundary checks
-        bool left = (index - arr[index] >= 0) && dfs(arr, index - arr[index], visited);
-        bool right = (index + arr[index] < arr.size()) && dfs(arr, index + arr[index], visited);
+        
+        dp[index] = 0;
 
-        // Return true if either direction reaches zero
-        return left || right;
+        bool left = (index - arr[index] >= 0) && solve(arr, index - arr[index], dp);
+        bool right = (index + arr[index] < arr.size()) && solve(arr, index + arr[index], dp);
+
+        return dp[index] = (left || right);
     }
 
     bool canReach(vector<int>& arr, int start) {
-        vector<bool> visited(arr.size(), false);
-        return dfs(arr, start, visited);
+        vector<int> dp(arr.size(), -1);
+        return solve(arr, start, dp);
     }
 };
