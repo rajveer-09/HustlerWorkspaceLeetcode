@@ -9,6 +9,8 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+ int sum = 0;
 class Solution {
 public:
     void solve(TreeNode* root , int& sum){
