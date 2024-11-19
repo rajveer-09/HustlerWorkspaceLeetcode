@@ -7,12 +7,15 @@ public:
         if (n < len) return ans;
 
         long long sum = 0;
+        int st = 0;
+
         for (int i = 0; i < n; i++) {
             sum += nums[i];
             
-            if (i >= len - 1) {
+            if (i - st + 1 == len) {
                 ans[i - k] = sum / len;
-                sum -= nums[i - len + 1];
+                sum -= nums[st];
+                st++;
             }
         }
 
