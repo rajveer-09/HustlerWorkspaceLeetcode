@@ -1,32 +1,30 @@
 class Solution {
 public:
-    bool check(unordered_map<char, int>& mp){
-        for(auto& it : mp) if(it.second > 0) return false;
-        return true;
-    }
     string minWindow(string s, string t) {
-        unordered_map<char, int> mp;
-        for(char it : t) mp[it]++;
+        map<char, int> mp;
+        for (char it : t) mp[it]++;
 
-        int st = 0, ans = INT_MAX, start = 0;
+        int start = 0, minLength = INT_MAX, left = 0;
+        int count = t.size();
 
-        for (int i = 0; i < s.size(); i++) {
-            if (mp.find(s[i]) != mp.end()) {
-                mp[s[i]]--;
-            }
-            while (check(mp)) {
-                if (ans > i - st + 1) {
-                    ans = i - st + 1;
-                    start = st;
+        for (int right = 0; right < s.size(); ++right) {
+            if (mp[s[right]] > 0) count--;
+            mp[s[right]]--;
+
+            while (count == 0) {
+                if (right - left + 1 < minLength) {
+                    minLength = right - left + 1;
+                    start = left;
                 }
-                if (mp.find(s[st]) != mp.end()) {
-                    mp[s[st]]++;
+                mp[s[left]]++;
+                if (mp[s[left]] > 0) {
+                    count++;
                 }
-                st++;
+                left++;
             }
         }
-        if (ans == INT_MAX) return "";
+        if (minLength == INT_MAX) return "";
 
-        return s.substr(start, ans);
+        return s.substr(start, minLength);
     }
 };
