@@ -1,35 +1,49 @@
 class Solution {
 public:
     string longestPalindrome(string s) {
-        ios_base::sync_with_stdio(false);
-        int len = s.length();
-        if (len < 2) {
-            return s;
+        string s_prime = "#";
+        for (char c : s) {
+            s_prime += c;
+            s_prime += "#";
         }
 
-        int start = 0;
-        int maxLen = 1;
+        int n = s_prime.length();
+        vector<int> palindrome_radii(n, 0);
+        int center = 0;
+        int radius = 0;
 
-        int i = 0;
-        while (i < len) {
-            int l = i, r = i;
-            while (r < len - 1 && s[r] == s[r + 1]) {
-                r++;
-            }
-            i = r + 1;
+        for (int i = 0; i < n; i++) {
+            int mirror = 2 * center - i;
 
-            while (l > 0 && r < len - 1 && s[l - 1] == s[r + 1]) {
-                l--;
-                r++;
+            if (i < radius) {
+                palindrome_radii[i] = min(radius - i, palindrome_radii[mirror]);
             }
 
-            int curLen = r - l + 1;
-            if (curLen > maxLen) {
-                start = l;
-                maxLen = curLen;
+            while (i + 1 + palindrome_radii[i] < n &&
+                   i - 1 - palindrome_radii[i] >= 0 &&
+                   s_prime[i + 1 + palindrome_radii[i]] ==
+                       s_prime[i - 1 - palindrome_radii[i]]) {
+                palindrome_radii[i]++;
+            }
+
+            if (i + palindrome_radii[i] > radius) {
+                center = i;
+                radius = i + palindrome_radii[i];
             }
         }
 
-        return s.substr(start, maxLen);
+        int max_length = 0;
+        int center_index = 0;
+        for (int i = 0; i < n; i++) {
+            if (palindrome_radii[i] > max_length) {
+                max_length = palindrome_radii[i];
+                center_index = i;
+            }
+        }
+
+        int start_index = (center_index - max_length) / 2;
+        string longest_palindrome = s.substr(start_index, max_length);
+
+        return longest_palindrome;
     }
 };
