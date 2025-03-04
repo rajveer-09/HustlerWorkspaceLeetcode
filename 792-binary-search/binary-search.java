@@ -7,15 +7,11 @@ class Solution {
 
             if(nums[m] == target) return m;
 
-            if(nums[m] > target) {
-                r = m - 1;
-            }
-            else{
-                l = m + 1;
-            }
+
+            if(nums[m] > target) r = m - 1;
+            else l = m + 1;
         }
-
-
+        
         return -1;
 
     }
