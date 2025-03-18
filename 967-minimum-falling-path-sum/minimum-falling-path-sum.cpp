@@ -1,36 +1,25 @@
 class Solution {
 public:
-    int memo(vector<vector<int>>& matrix, int i, int j, vector<vector<int>>& dp){
-        int n = matrix.size();
-        int m = matrix[0].size();
-
-        if(i < 0 || j < 0 || j >= m) return INT_MAX;
-
-        if(i == 0) return matrix[i][j];
-
-        if(dp[i][j] != INT_MAX) return dp[i][j];
-
-        long long d = matrix[i][j] * 1LL + memo(matrix, i - 1, j, dp);
-        long long rd = matrix[i][j] * 1LL + memo(matrix, i - 1, j - 1, dp);
-        long long ld = matrix[i][j] * 1LL + memo(matrix, i - 1, j + 1, dp);
-
-        return dp[i][j] = (int)min({d, rd, ld});
-        
-    }
-
     int minFallingPathSum(vector<vector<int>>& matrix) {
         int n = matrix.size();
         int m = matrix[0].size();
+        
+        vector<vector<int>> dp(n, vector<int>(m, 0));
 
-        vector<vector<int>> dp(n, vector<int>(m, INT_MAX));
-
-        int ans = INT_MAX;
-
-        for(int j = 0; j < m; j++){
-            ans = min(ans, memo(matrix, n - 1, j, dp)); 
-
+        for (int j = 0; j < m; j++) {
+            dp[0][j] = matrix[0][j];
         }
 
-        return ans;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                int d = dp[i - 1][j];
+                int ld = (j > 0) ? dp[i - 1][j - 1] : INT_MAX;
+                int rd = (j < m - 1) ? dp[i - 1][j + 1] : INT_MAX;
+
+                dp[i][j] = matrix[i][j] + min({d, ld, rd});
+            }
+        }
+
+        return *min_element(dp[n - 1].begin(), dp[n - 1].end());
     }
 };
