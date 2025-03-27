@@ -1,20 +1,25 @@
 class Solution {
 public:
-    int fun(int n, vector<int>& dp) {
-        if (n <= 1) return 1;
-
-        if (dp[n] != -1) return dp[n];
+    int kam (vector<int>&dp , int  i, int  n){
+        if(i==n){
+            return 1;
+        }
+        if(dp[i]!=-1){
+            return dp[i];
+        }
+        int r1=0,r2=0;
+        r1=kam(dp,i+1,n);
+        if(i+2<=n){
+           r2=kam(dp,i+2,n);
+        }
         
-        int take_prev = fun(n - 1, dp);
-        int not_takeprev = (n >= 2) ? fun(n - 2, dp) : 0;
-
-        dp[n] = take_prev + not_takeprev;
-
-        return dp[n];
+        return dp[i]=r1+r2 ;
     }
-
     int climbStairs(int n) {
-        vector<int> dp(n + 1, -1); 
-        return fun(n, dp); 
+        if(n==1){
+            return 1;
+        }
+        vector<int>dp(n+1,-1);
+        return kam(dp,0,n);
     }
 };
