@@ -1,32 +1,30 @@
+import java.util.Arrays;
+
 class Solution {
-    long memo(int [][] grid, int i, int j, long[][] dp){
+    private int memo(int[][] grid, int i, int j, int[][] dp) {
         int n = grid.length;
         int m = grid[0].length;
 
         if (i == n - 1 && j == m - 1) return grid[i][j];
+        if (i >= n || j >= m) return Integer.MAX_VALUE;
 
-        if(i >= n || j >= m) return Integer.MAX_VALUE;
-        // jab v int_max return kro....check kro kuchh add hoke integeroverflow toh nahi horha
+        if (dp[i][j] != -1) return dp[i][j];
 
-        if(dp[i][j] != -1) return dp[i][j];
+        int right = memo(grid, i, j + 1, dp);
+        int down = memo(grid, i + 1, j, dp);
 
-        long right = grid[i][j] + memo(grid, i, j + 1, dp);
-        long down = grid[i][j] + memo(grid, i + 1, j, dp);
-
-        return dp[i][j] = Math.min(right, down);
+        return dp[i][j] = grid[i][j] +  Math.min(right, down);
     }
+
     public int minPathSum(int[][] grid) {
         int n = grid.length;
         int m = grid[0].length;
 
-        long [][] dp = new long[n][m];
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                dp[i][j] = -1;
-            }
+        int[][] dp = new int[n][m];
+        for (int[] row : dp) {
+            Arrays.fill(row, -1);
         }
 
-        return (int)memo(grid, 0, 0, dp);
+        return memo(grid, 0, 0, dp);
     }
 }
