@@ -1,4 +1,20 @@
 class Solution {
+    public void dfs(char[][] grid, int i, int j, boolean[][] vis) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        if (i < 0 || j < 0 || i >= m || j >= n) return;
+
+        if (grid[i][j] != '1' || vis[i][j]) return;
+
+        vis[i][j] = true;
+
+        dfs(grid, i - 1, j, vis);
+        dfs(grid, i + 1, j, vis);
+        dfs(grid, i, j - 1, vis);
+        dfs(grid, i, j + 1, vis);
+
+    }
     public void bfs(char[][] grid, int i, int j, boolean vis[][]){
         int n = grid.length;
         int m = grid[0].length;
@@ -42,7 +58,7 @@ class Solution {
         for(int i = 0; i < n; i++){
             for(int j = 0; j <  m; j++){
                 if(grid[i][j] == '1' && !vis[i][j]){
-                    bfs(grid, i, j, vis);
+                    dfs(grid, i, j, vis);
                     cnt++;
                 }
             }
