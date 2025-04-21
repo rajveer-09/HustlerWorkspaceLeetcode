@@ -1,59 +1,69 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
 class Solution {
 public:
-     unordered_map<int, vector<int>> graph;
+    unordered_map<TreeNode*, TreeNode*> parent;
+
+    void addParent(TreeNode* root) {
+        if (!root) return;
+
+        if (root->left) {
+            parent[root->left] = root;
+            addParent(root->left);
+        }
+
+        if (root->right) {
+            parent[root->right] = root;
+            addParent(root->right);
+        }
+    }
+
+    TreeNode* findNode(TreeNode* root, int val) {
+        if (!root) return nullptr;
+        if (root->val == val) return root;
+
+        TreeNode* left = findNode(root->left, val);
+        if (left) return left;
+
+        return findNode(root->right, val);
+    }
 
     int amountOfTime(TreeNode* root, int start) {
-        constructGraph(root);
+        addParent(root);
+        
+        TreeNode* target = findNode(root, start);
 
-        queue<int> q;
-        q.push(start);
+        queue<TreeNode*> que;
+        que.push(target);
 
-        unordered_set<int> visited;
+        unordered_set<TreeNode*> visited;
+        visited.insert(target);
 
-        int minutesPassed = -1;
+        int time = -1;
 
-        while (!q.empty()) {
-            ++minutesPassed;
-            for (int levelSize = q.size(); levelSize > 0; --levelSize) {
-                int currentNode = q.front();
-                q.pop();
-                visited.insert(currentNode);
-                for (int adjacentNode : graph[currentNode]) {
-                    if (!visited.count(adjacentNode)) {
-                        q.push(adjacentNode);
-                    }
+        while (!que.empty()) {
+            int size = que.size();
+            time++;
+
+            while (size--) {
+                TreeNode* curr = que.front();
+                que.pop();
+
+                if (curr->left && !visited.count(curr->left)) {
+                    que.push(curr->left);
+                    visited.insert(curr->left);
+                }
+
+                if (curr->right && !visited.count(curr->right)) {
+                    que.push(curr->right);
+                    visited.insert(curr->right);
+                }
+
+                if (parent.count(curr) && !visited.count(parent[curr])) {
+                    que.push(parent[curr]);
+                    visited.insert(parent[curr]);
                 }
             }
         }
 
-        return minutesPassed;
-    }
-
-    void constructGraph(TreeNode* root) {
-        if (!root) return;
-
-        if (root->left) {
-            graph[root->val].push_back(root->left->val);
-            graph[root->left->val].push_back(root->val);
-        }
-
-        if (root->right) {
-            graph[root->val].push_back(root->right->val);
-            graph[root->right->val].push_back(root->val);
-        }
-
-        constructGraph(root->left);
-        constructGraph(root->right);  
+        return time;
     }
 };
