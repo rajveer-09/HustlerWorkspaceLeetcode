@@ -1,21 +1,17 @@
 class Solution {
 public:
     int partitionString(string s) {
-        
         int ans = 0;
-        int n = s.size();
+        vector<bool> seen(26, false);
 
-        for(int i = 0; i < n; ){
-            unordered_set<char> st;
-
-            while(i < n && !st.count(s[i])){
-                st.insert(s[i]);
-                i++;
+        for (int i = 0; i < s.size(); ++i) {
+            if (seen[s[i] - 'a']) {
+                ans++;
+                fill(seen.begin(), seen.end(), false);
             }
-
-            ans++;
+            seen[s[i] - 'a'] = true;
         }
 
-        return ans;
+        return ans + 1;
     }
 };
