@@ -2,14 +2,17 @@ class Solution {
 public:
     int partitionString(string s) {
         int ans = 0;
-        vector<bool> seen(26, false);
+        int mask = 0;
 
-        for (int i = 0; i < s.size(); ++i) {
-            if (seen[s[i] - 'a']) {
+        for (char c : s) {
+            int bit = c - 'a';
+
+            if (mask & (1 << bit)) {
                 ans++;
-                fill(seen.begin(), seen.end(), false);
+                mask = 0;
             }
-            seen[s[i] - 'a'] = true;
+
+            mask |= (1 << bit);
         }
 
         return ans + 1;
