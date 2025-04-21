@@ -10,7 +10,7 @@ public:
     }
 
     int maxSum(vector<int>& nums) {
-        map<int, priority_queue<int, vector<int>, greater<int>>> mpp;
+        unordered_map<int, priority_queue<int, vector<int>, greater<int>>> mpp;
 
         for(int num : nums) {
             int d = lgd(num);
