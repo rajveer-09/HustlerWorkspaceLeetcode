@@ -1,42 +1,41 @@
 class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        ios_base::sync_with_stdio(false);
-        int m= nums1.size();
-        int n= nums2.size();
-        vector<int> merged(m + n);
-        int i=0,j=0,k=0;
-        while(i<m&&j<n){
-            if(nums1[i]<nums2[j]){
-                merged[k]=nums1[i];
-                i++;
-            }
-            else{
-                merged[k]=nums2[j];
-                j++;
-            }
-            k++;
-        }
-        while(i<m){
-            merged[k]=nums1[i];
-            i++;
-            k++;
+        int n = nums1.size();
+        int m = nums2.size();
 
-        }
-        while(j<n){
-            merged[k]=nums2[j];
-            j++;
-            k++;
+        // Always binary search on the smaller array
+        if (n > m) return findMedianSortedArrays(nums2, nums1);
 
+        int low = 0, high = n;
+
+        while (low <= high) {
+            // left me chhotey waale ke kitne aaynge about median
+            int Px = low + (high - low) / 2;
+            // bache huye left ke elemnt bade arr se aynge
+            int Py = (n + m + 1) / 2 - Px;
+
+            int x1 = (Px == 0) ? INT_MIN : nums1[Px - 1];
+            int x2 = (Px == n) ? INT_MAX : nums1[Px];
+
+            int y1 = (Py == 0) ? INT_MIN : nums2[Py - 1];
+            int y2 = (Py == m) ? INT_MAX : nums2[Py];
+
+            if (x1 <= y2 && y1 <= x2) {
+                if ((n + m) % 2 == 0) {
+                    return (max(x1, y1) + min(x2, y2)) / 2.0;
+                } else {
+                    return max(x1, y1);
+                }
+            } 
+            else if (x1 > y2) {
+                high = Px - 1;
+            } 
+            else {
+                low = Px + 1;
+            }
         }
-        if((m+n)%2!=0){
-            return merged[(m+n)/2];
-        }
-        else{
-            int x=(m+n)/2;
-            double p=merged[x];
-            double q=merged[x-1];
-            return (p+q)/2;
-        }
+
+        return -1;
     }
 };
