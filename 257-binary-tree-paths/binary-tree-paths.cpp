@@ -1,32 +1,30 @@
 class Solution {
 public:
-    void traverse(TreeNode* root, string s, vector<string>& ans){
-        if(!root) return;
+    void backtrack(TreeNode* root, vector<int>& path, vector<string>& ans) {
+        if (!root) return;
 
-        if(s.size() == 0){
-            s += to_string(root->val);
-        }
-        else{
-            s += "->";
-            s += to_string(root->val);
-        }
+        path.push_back(root->val);
 
-        if(!root->left && !root->right){
+        if (!root->left && !root->right) {
+            string s = to_string(path[0]);
+            for (int i = 1; i < path.size(); ++i) {
+                s += "->" + to_string(path[i]);
+            }
             ans.push_back(s);
-        
         }
 
-        traverse(root->left, s, ans);
-        traverse(root->right, s, ans);
+        backtrack(root->left, path, ans);
+        backtrack(root->right, path, ans);
 
-        
+        path.pop_back();
     }
+
     vector<string> binaryTreePaths(TreeNode* root) {
-        string s = "";
         vector<string> ans;
+        vector<int> path;
 
-        traverse(root, s, ans);
-
+        backtrack(root, path, ans);
+        
         return ans;
     }
 };
