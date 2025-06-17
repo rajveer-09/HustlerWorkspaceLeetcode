@@ -1,16 +1,16 @@
 class Solution {
 public:
+    bool solve(TreeNode* root, int tg){
+        if(!root) return false;
+
+        if(root->val == tg && !root->left && !root->right) return true;
+
+        bool l = solve(root->left, tg - root->val);
+        bool r = solve(root->right, tg - root->val);
+
+        return l || r;
+    } 
     bool hasPathSum(TreeNode* root, int targetSum) {
-        ios_base::sync_with_stdio(false);
-        if (root == nullptr) return false;
-
-        if (root->left == nullptr && root->right == nullptr) {
-            return targetSum == root->val;
-        }
-
-        bool leftSum = hasPathSum(root->left, targetSum - root->val);
-        bool rightSum = hasPathSum(root->right, targetSum - root->val);
-
-        return leftSum || rightSum;
+        return solve(root, targetSum);
     }
 };
