@@ -1,15 +1,27 @@
 class Solution {
 public:
-    int maxProfit(vector<int>& prices) {
-        int maxi=0;
-        int n= prices.size();
-        int mini=prices[0];
+    int n;
+    vector<vector<int>> dp;
 
-        for(int i=1;i<n;i++){
-            if(prices[i]<mini) mini=prices[i];
-            else if(prices[i]-mini > maxi) maxi= prices[i]-mini;
+    int helper(int idx, bool canBuy, vector<int>& prices) {
+        if (idx == n) return 0;
+        if (dp[idx][canBuy] != -1) return dp[idx][canBuy];
+
+        if (canBuy) {
+            int buy = -prices[idx] + helper(idx + 1, false, prices);
+            int skip = helper(idx + 1, true, prices);
+            return dp[idx][canBuy] = max(buy, skip);
+        } 
+        else {
+            int sell = prices[idx]; // sell once and done
+            int skip = helper(idx + 1, false, prices);
+            return dp[idx][canBuy] = max(sell, skip);
         }
+    }
 
-        return maxi;
+    int maxProfit(vector<int>& prices) {
+        n = prices.size();
+        dp.assign(n, vector<int>(2, -1));
+        return helper(0, true, prices);
     }
 };
