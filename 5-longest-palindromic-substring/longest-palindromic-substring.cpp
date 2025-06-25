@@ -1,49 +1,39 @@
 class Solution {
 public:
+    int dp[1001][1001];
+    string ans;
+    
+    bool isPalindrome(string &s, int i, int j) {
+        if (i >= j) return true;
+
+        if (dp[i][j] != -1) return dp[i][j];
+
+        if (s[i] != s[j]) return dp[i][j] = 0;
+
+        return dp[i][j] = isPalindrome(s, i+1, j-1);
+    }
+
     string longestPalindrome(string s) {
-        string s_prime = "#";
-        for (char c : s) {
-            s_prime += c;
-            s_prime += "#";
-        }
+        memset(dp, -1, sizeof(dp));
 
-        int n = s_prime.length();
-        vector<int> palindrome_radii(n, 0);
-        int center = 0;
-        int radius = 0;
+        int n = s.size();
+        ans = s.substr(0, 1);
 
-        for (int i = 0; i < n; i++) {
-            int mirror = 2 * center - i;
+        int maxLen = 1;
 
-            if (i < radius) {
-                palindrome_radii[i] = min(radius - i, palindrome_radii[mirror]);
-            }
+        for(int i = 0; i < n; i++){
+            for(int j = i; j < n; j++){
+                if(isPalindrome(s, i, j)){
+                    int length = j - i + 1;
 
-            while (i + 1 + palindrome_radii[i] < n &&
-                   i - 1 - palindrome_radii[i] >= 0 &&
-                   s_prime[i + 1 + palindrome_radii[i]] ==
-                       s_prime[i - 1 - palindrome_radii[i]]) {
-                palindrome_radii[i]++;
-            }
-
-            if (i + palindrome_radii[i] > radius) {
-                center = i;
-                radius = i + palindrome_radii[i];
+                    if(length > maxLen){
+                        maxLen = length;
+                        ans = s.substr(i, length);
+                    } 
+                }
             }
         }
 
-        int max_length = 0;
-        int center_index = 0;
-        for (int i = 0; i < n; i++) {
-            if (palindrome_radii[i] > max_length) {
-                max_length = palindrome_radii[i];
-                center_index = i;
-            }
-        }
-
-        int start_index = (center_index - max_length) / 2;
-        string longest_palindrome = s.substr(start_index, max_length);
-
-        return longest_palindrome;
+        return ans;
     }
 };
