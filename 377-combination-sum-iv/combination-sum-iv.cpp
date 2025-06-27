@@ -1,25 +1,23 @@
 class Solution {
 public:
-    int combinationSum4(vector<int>& nums, int target) {
-        vector<int> dp(target + 1, 0);
-        dp[0] = 1;  // Base case: one way to make zero sum (using no elements)
+    int dp[1001];
 
-        for (int i = 1; i <= target; i++) {
-            for (int num : nums) {
-                if (num <= i) {
-                    // Check for potential overflow before updating dp[i]
-                    if (dp[i] > INT_MAX - dp[i - num]) {
-                        /* If overflow is detected, set dp[i] to a
-                         value that signifies an invalid state */
-                        dp[i] = INT_MAX;
-                    } 
-                    else {
-                        dp[i] += dp[i - num];
-                    }
-                }
+    int solve(vector<int>& nums, int target) {
+        if (target == 0) return 1;
+        if (dp[target] != -1) return dp[target];
+
+        int ways = 0;
+        for (int num : nums) {
+            if (target >= num) {
+                ways += solve(nums, target - num);
             }
         }
 
-        return dp[target];
+        return dp[target] = ways;
+    }
+
+    int combinationSum4(vector<int>& nums, int target) {
+        memset(dp, -1, sizeof(dp));
+        return solve(nums, target);
     }
 };
