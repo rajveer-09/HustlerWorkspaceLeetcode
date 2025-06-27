@@ -1,27 +1,29 @@
 class Solution {
 public:
+    unordered_map<int, vector<int>> dp;
+
     vector<int> largestDivisibleSubset(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        int n = nums.size();
-        vector<int> groupSize(n, 1), prevElement(n, -1);
-        int maxIndex = 0;
+        sort(begin(nums), end(nums));
+        vector<int> ans;
+        for(int i = 0; i < size(nums); i++) {
+            auto res = solve(nums, i);
+            if(size(res) > size(ans)) ans = res;
+        }
+        return ans;
+    }
+    vector<int> solve(vector<int>& nums, int start) {
+        if(start >= size(nums)) return {};
 
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < i; ++j) {
-                if (nums[i] % nums[j] == 0 && groupSize[i] < groupSize[j] + 1) {
-                    groupSize[i] = groupSize[j] + 1;
-                    prevElement[i] = j;
-                }
-            }
-            if (groupSize[i] > groupSize[maxIndex]) {
-                maxIndex = i;
-            }
+        if(dp.count(start)) return dp[start];
+
+        for(int next = start+1; next < size(nums); next++) {
+            if(nums[next] % nums[start]) continue;
+            auto res = solve(nums, next);
+            if(size(res) >= size(dp[start])) dp[start] = res;
         }
 
-        vector<int> result;
-        for (int i = maxIndex; i != -1; i = prevElement[i]) {
-            result.insert(result.begin(), nums[i]);
-        }
-        return result;
+        dp[start].push_back(nums[start]);
+        
+        return dp[start];
     }
 };
