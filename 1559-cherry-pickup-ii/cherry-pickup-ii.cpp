@@ -6,22 +6,25 @@ class Solution {
     int dfs(int row, int c1, int c2, vector<vector<int>>& grid, int m, int n) {
         if (c1 < 0 || c1 >= n || c2 < 0 || c2 >= n) return INT_MIN;
 
-        if (row == m - 1){
-            return grid[row][c1] + (c1 == c2 ? 0 : grid[row][c2]);
+         // Base case: Last row reached
+        if (row == m - 1) {
+            if (c1 == c2) return grid[row][c1];            // both robots on same cell, count once
+            else return grid[row][c1] + grid[row][c2];     // different cells, count both
         }
 
         if (dp[row][c1][c2] != -1) return dp[row][c1][c2];
 
         int maxCherries = 0;
-
+        // Try all 9 combinations of moves (left, stay, right for both robots)
         for (int move1 = -1; move1 <= 1; move1++) {
             for (int move2 = -1; move2 <= 1; move2++) {
                 int val = dfs(row + 1, c1 + move1, c2 + move2, grid, m, n);
                 maxCherries = max(maxCherries, val);
             }
         }
-
-        int cherries = grid[row][c1] + (c1 == c2 ? 0 : grid[row][c2]);
+        // Pick current cherries from (row, c1) and (row, c2)
+        int cherries = grid[row][c1];
+        if (c1 != c2) cherries += grid[row][c2]; // avoid double count
 
         return dp[row][c1][c2] = cherries + maxCherries;
     }
