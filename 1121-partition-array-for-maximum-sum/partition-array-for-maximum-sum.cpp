@@ -1,31 +1,25 @@
 class Solution {
 public:
-    int maxSumAfterPartitioning(vector<int>& arr, int k) {
-        int n = arr.size();
+    int dp[501][501];
+    int solve(int i, int j, int k, vector<int>& arr){
+        if(i > j) return 0;
 
-        // Dynamic programming table to store maximum sum at each position
-        std::vector<int> dp(n + 1, 0);
+        if(dp[i][j] != -1) return dp[i][j];
 
-        // Iterate through the array elements
-        for (int i = 0; i < n; i++) {
-            int curMax = 0, curSum = 0;
+        int sum = 0;
+        int maxi = -1;
 
-            // Iterate over the last k elements or until the beginning of the array
-            for (int j = i; j >= std::max(0, i - k + 1); j--) {
-                // Update the maximum value in the current partition
-                curMax = std::max(curMax, arr[j]);
-
-                // Calculate the current sum considering the maximum value in the partition
-                int cur = curMax * (i - j + 1) + dp[j];
-
-                // Update the current sum if the new one is greater
-                curSum = std::max(curSum, cur);
-            }
-
-            // Update the dynamic programming table with the maximum sum at the current position
-            dp[i + 1] = curSum;
+        for(int p = i; p <= j && p < i + k; p++){
+            maxi = max(arr[p], maxi);
+            sum = max(sum, solve(p + 1, j, k, arr) + (p - i + 1) * maxi);
         }
 
-        return dp[n];
+        return dp[i][j] = sum;
+    }
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        memset(dp, -1, sizeof(dp));
+        int n = arr.size();
+
+        return solve(0, n - 1, k, arr);
     }
 };
