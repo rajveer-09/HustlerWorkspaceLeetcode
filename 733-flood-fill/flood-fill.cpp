@@ -1,49 +1,26 @@
-class Solution{
-    public:
-    void bfs(vector<vector<int>> &grid, int i, int j, int newColor, vector<vector<bool>>& visited) {
-        int n = grid.size();
-        int m = grid[0].size();
-
-        int val = grid[i][j];
-
-        queue<pair<int, int>> q;
-        q.push({i, j});
-        visited[i][j] = true;
-        grid[i][j] = newColor;
-
-        while (!q.empty()) {
-            int x = q.front().first;
-            int y = q.front().second;
-            q.pop();
-
-            // Directions for moving up, down, left, and right
-            vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-
-            for (auto dir : directions) {
-                int xx = x + dir.first;
-                int yy = y + dir.second;
-
-                if (xx >= 0 && xx < n && yy >= 0 && yy < m) {
-                    if (!visited[xx][yy] && grid[xx][yy] == val) {
-                        q.push({xx, yy});
-                        visited[xx][yy] = true;
-                        grid[xx][yy] = newColor;
-                    }
-                }
-            }
+class Solution {
+public:
+    void dfs(vector<vector<int>>& image, int i, int j, int color, int start) {
+        int n = image.size();
+        int m = image[0].size();
+        
+        if (i < 0 || i >= n || j < 0 || j >= m || image[i][j] != start) {
+            return;
         }
+
+        image[i][j] = color;
+
+        dfs(image, i + 1, j, color, start);
+        dfs(image, i - 1, j, color, start);
+        dfs(image, i, j + 1, color, start);
+        dfs(image, i, j - 1, color, start);
     }
-    vector<vector<int>> floodFill(vector<vector<int>> &images,
-                                  int sr, int sc, int newColor) {
-        int n = images.size();
-        int m = images[0].size();
 
-        vector<vector<int>> image = images;
-
-        vector<vector<bool>> visited(n, vector<bool>(m, false));
-
-        bfs(image, sr, sc,newColor, visited);
-
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        int start = image[sr][sc];
+        if (start == color) return image; //important fix
+        dfs(image, sr, sc, color, start);
+        
         return image;
     }
 };
