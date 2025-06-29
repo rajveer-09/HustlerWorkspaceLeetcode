@@ -4,14 +4,20 @@ public:
         int n = grid.size();
         int m = grid[0].size();
         queue<pair<int, int>> q;
+        int freshCount = 0;
 
         for(int i = 0; i < n; i++){
             for(int j = 0; j < m; j++){
                 if(grid[i][j] == 2){
                     q.push({i, j});
                 }
+                else if(grid[i][j] == 1){
+                    freshCount++;
+                }
             }
         }
+
+        if(freshCount == 0) return 0;
 
         int cnt = 0;
         vector<vector<int>> dir = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
@@ -31,6 +37,7 @@ public:
                         grid[xx][yy] = 2;
                         q.push({xx, yy});
                         changed = true;
+                        freshCount--;
                     }
                 }
             }
@@ -38,11 +45,7 @@ public:
             if(changed) cnt++;
         }
 
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < m; j++){
-                if(grid[i][j] == 1) return -1;
-            }
-        }
+        if(freshCount) return -1;
 
         return cnt;
     }
