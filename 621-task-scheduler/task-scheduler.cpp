@@ -1,37 +1,37 @@
 class Solution {
 public:
     typedef pair<int, char> P; // {freq, task}
-    
+
     int leastInterval(vector<char>& tasks, int n) {
         unordered_map<char, int> freq;
-        for (char ch : tasks) {
-            freq[ch]++;
+        for (char ch : tasks) freq[ch]++;
+
+        priority_queue<P> pq;
+        for (auto& it : freq) {
+            pq.push({it.second, it.first});
         }
-        
-        priority_queue<int> pq;
-        for (auto& [ch, f] : freq) {
-            pq.push(f);
-        }
-        
+
         int time = 0;
-        
+
         while (!pq.empty()) {
-            vector<int> temp;
-            int cnt = 0;
-            
-            for (int i = 0; i <= n; i++) {
-                if (!pq.empty()) {
-                    int f = pq.top(); pq.pop();
-                    if (f > 1) temp.push_back(f - 1);
-                    cnt++;
-                }
+            int cycle = n + 1;
+            vector<P> temp;
+
+            while (cycle-- && !pq.empty()) {
+                auto [f, ch] = pq.top(); pq.pop();
+
+                if (f - 1 > 0) temp.push_back({f - 1, ch});
+                
+                time++;
             }
-            
-            for (int f : temp) pq.push(f);
-            
-            time += pq.empty() ? cnt : (n + 1);
+
+            for (auto& p : temp) pq.push(p);
+
+            if (!pq.empty()) {
+                time += cycle + 1;  // fill remaining idle slots
+            }
         }
-        
+
         return time;
     }
 };
