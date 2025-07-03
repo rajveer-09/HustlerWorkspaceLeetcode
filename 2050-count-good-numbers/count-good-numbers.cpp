@@ -3,26 +3,24 @@ public:
     const int MOD = 1e9 + 7;
 
     long long binExp(long long a, long long b) {
-        long long res = 1;
-        a %= MOD;
+        if (b == 0) return 1;
 
-        while (b > 0) {
-            if (b & 1)
-                res = (res * a) % MOD;
+        long long half = binExp(a, b / 2);
+        long long res = (half * half) % MOD;
 
-            a = (a * a) % MOD;
-            b >>= 1;
-        }
+        if (b & 1) res = (res * a) % MOD;
 
         return res;
     }
+
     int countGoodNumbers(long long n) {
         long long oddPlaces = n / 2;
         long long evenPlaces = (n + 1) / 2;
 
-        return (int)(binExp(4, oddPlaces) % MOD * binExp(5, evenPlaces) % MOD) % MOD;
+        return (int)((binExp(5, evenPlaces) * binExp(4, oddPlaces)) % MOD);
     }
 };
+
 /*
 n -> odd -> even pos = (odd + 1) / 2;
         -> odd pos = odd / 2;
