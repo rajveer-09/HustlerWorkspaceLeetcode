@@ -1,46 +1,40 @@
 class Solution {
 public:
-    bool safe(vector<string>& board, int row, int col) {
-        int r = row, c = col;
-        while (r >= 0 && c >= 0) {
-            if (board[r][c] == 'Q') return false;
-            r--;
-            c--;
-        }
-        r = row;
-        c = col;
-        while (c >= 0) {
-            if (board[r][c] == 'Q') return false;
-            c--;
-        }
-        r = row;
-        c = col;
-        while (r < board.size() && c >= 0) {
-            if (board[r][c] == 'Q') return false;
-            r++;
-            c--;
-        }
-        return true;
-    }
+    set<int> cols, diag1, diag2;
 
-    void func(int col, vector<vector<string>>& ans, vector<string>& board) {
-        if (col == board.size()) {
-            ans.push_back(board);
+    void solve(int n, int i, vector<string>& row, vector<vector<string>>& chess){
+        if(i == n){
+            chess.push_back(row);
             return;
         }
-        for (int row = 0; row < board.size(); row++) {
-            if (safe(board, row, col)) {
-                board[row][col] = 'Q';
-                func(col + 1, ans, board);
-                board[row][col] = '.';
+
+        for(int c = 0; c < n; c++){
+            if(cols.count(c) || diag1.count(i - c) || diag2.count(i + c)){
+                continue;
             }
+
+            cols.insert(c);
+            diag1.insert(i - c);
+            diag2.insert(i + c);
+            row[i][c] = 'Q';
+
+            solve(n, i + 1, row, chess);
+
+            cols.erase(c);
+            diag1.erase(i - c);
+            diag2.erase(i + c);
+            row[i][c] = '.';
         }
     }
 
     vector<vector<string>> solveNQueens(int n) {
-        vector<vector<string>> ans;
-        vector<string> board(n, string(n, '.'));
-        func(0, ans, board);
-        return ans;
+        vector<vector<string>> chess;
+        string s(n, '.');
+
+        vector<string> row(n, s);
+
+        solve(n, 0, row, chess);
+        
+        return chess;
     }
 };
