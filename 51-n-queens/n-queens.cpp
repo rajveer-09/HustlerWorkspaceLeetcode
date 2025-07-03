@@ -1,39 +1,46 @@
 class Solution {
 public:
-    set<pair<int, int>> used; //{i, j};
-    void solve(int n, int i, vector<string>& row, vector<vector<string>>& chess){
-        if(i == n){
-            chess.push_back(row);
+    bool safe(vector<string>& board, int row, int col) {
+        int r = row, c = col;
+        while (r >= 0 && c >= 0) {
+            if (board[r][c] == 'Q') return false;
+            r--;
+            c--;
+        }
+        r = row;
+        c = col;
+        while (c >= 0) {
+            if (board[r][c] == 'Q') return false;
+            c--;
+        }
+        r = row;
+        c = col;
+        while (r < board.size() && c >= 0) {
+            if (board[r][c] == 'Q') return false;
+            r++;
+            c--;
+        }
+        return true;
+    }
+
+    void func(int col, vector<vector<string>>& ans, vector<string>& board) {
+        if (col == board.size()) {
+            ans.push_back(board);
             return;
         }
-
-        for(int c = 0; c < n; c++){
-            bool flg = false;
-            for(auto it : used){
-                if(c == it.second || abs(i - it.first) == abs(c - it.second)){
-                    flg = true;
-                }
-                
+        for (int row = 0; row < board.size(); row++) {
+            if (safe(board, row, col)) {
+                board[row][col] = 'Q';
+                func(col + 1, ans, board);
+                board[row][col] = '.';
             }
-
-            if(flg) continue;
-
-            used.insert({i, c});
-            row[i][c] = 'Q';
-            solve(n, i + 1, row, chess);
-            used.erase({i, c});
-            row[i][c] = '.';
         }
     }
+
     vector<vector<string>> solveNQueens(int n) {
-        vector<vector<string>> chess;
-        string s = "";
-        for(int i = 0; i < n; i++) s += '.';
-
-        vector<string> row(n, s);
-
-        solve(n, 0, row, chess);
-
-        return chess;
+        vector<vector<string>> ans;
+        vector<string> board(n, string(n, '.'));
+        func(0, ans, board);
+        return ans;
     }
 };
