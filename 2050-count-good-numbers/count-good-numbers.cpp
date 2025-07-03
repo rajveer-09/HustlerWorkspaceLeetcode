@@ -1,20 +1,31 @@
 class Solution {
 public:
-    int countGoodNumbers(long long n) {
-        long long MOD = 1e9 + 7;
-        return (int)((power(5, (n + 1) / 2) * power(4, n / 2)) % MOD);
-    }
-private:
-    long long power(long long x, long long y) {
-        long long result = 1;
-        long long MOD = 1e9 + 7;
-        
-        while (y > 0) {
-            if (y % 2 == 1)
-                result = (result * x) % MOD;
-            x = (x * x) % MOD;
-            y /= 2;
+    const int MOD = 1e9 + 7;
+
+    long long binExp(long long a, long long b) {
+        long long res = 1;
+        a %= MOD;
+
+        while (b > 0) {
+            if (b & 1)
+                res = (res * a) % MOD;
+
+            a = (a * a) % MOD;
+            b >>= 1;
         }
-        return result;
+
+        return res;
+    }
+    int countGoodNumbers(long long n) {
+        long long oddPlaces = n / 2;
+        long long evenPlaces = (n + 1) / 2;
+
+        return (int)(binExp(4, oddPlaces) % MOD * binExp(5, evenPlaces) % MOD) % MOD;
     }
 };
+/*
+n -> odd -> even pos = (odd + 1) / 2;
+        -> odd pos = odd / 2;
+
+        evens -> [0,2,4,6,8] | odd -> [2, 3, 5, 7];
+*/
