@@ -1,18 +1,37 @@
 class Solution {
 public:
+    typedef pair<int, char> P; // {freq, task}
+    
     int leastInterval(vector<char>& tasks, int n) {
-        int freq[26] = {0};
-        for(char task : tasks){
-            freq[task - 'A']++;
+        unordered_map<char, int> freq;
+        for (char ch : tasks) {
+            freq[ch]++;
         }
-        sort(begin(freq) , end(freq));
-        int chunk = freq[25] - 1;
-        int idel = chunk * n;
-
-        for(int i=24; i>=0; i--){
-            idel -= min(chunk,freq[i]);
+        
+        priority_queue<int> pq;
+        for (auto& [ch, f] : freq) {
+            pq.push(f);
         }
-
-        return idel < 0 ? tasks.size() : tasks.size() + idel;
+        
+        int time = 0;
+        
+        while (!pq.empty()) {
+            vector<int> temp;
+            int cnt = 0;
+            
+            for (int i = 0; i <= n; i++) {
+                if (!pq.empty()) {
+                    int f = pq.top(); pq.pop();
+                    if (f > 1) temp.push_back(f - 1);
+                    cnt++;
+                }
+            }
+            
+            for (int f : temp) pq.push(f);
+            
+            time += pq.empty() ? cnt : (n + 1);
+        }
+        
+        return time;
     }
 };
