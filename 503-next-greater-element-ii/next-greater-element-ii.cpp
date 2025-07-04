@@ -5,7 +5,7 @@ public:
         vector<int> ans(n, -1);
         stack<int> st;
 
-        for (int i = 2 * n - 2; i >= 0; i--) {
+        for (int i = 2 * n - 1; i >= 0; i--) {
             int idx = i % n;
             while (!st.empty() && st.top() <= arr[idx]) {
                 st.pop();
