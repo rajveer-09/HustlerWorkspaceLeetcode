@@ -16,7 +16,7 @@ public:
             stk.pop_back();
         }
 
-        // Remove leading zeros
+        // Remove leading zeros.. eg. "0200"
         int i = 0;
         while (i < stk.size() && stk[i] == '0') i++;
         
