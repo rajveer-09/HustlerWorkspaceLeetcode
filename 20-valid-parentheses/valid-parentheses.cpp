@@ -1,25 +1,31 @@
 class Solution {
-public:
-    bool isValid(string s) {
-        stack<char> stack;
-
-        for (const char c : s)
-            if (c == '(')
-                stack.push(')');
-            else if (c == '{')
-                stack.push('}');
-            else if (c == '[')
-                stack.push(']');
-            else if (stack.empty() || pop(stack) != c)
-                return false;
-
-        return stack.empty();
+private:
+    bool isMatched(char open, char close) {
+        if ((open == '(' && close == ')') ||
+            (open == '[' && close == ']') ||
+            (open == '{' && close == '}')) {
+            return true;
+        }
+        return false;
     }
 
-private:
-    int pop(stack<char>& stack) {
-        const int c = stack.top();
-        stack.pop();
-        return c;
+public:
+    bool isValid(string str) {
+        stack<char> st;
+
+        for (int i = 0; i < str.length(); i++) {
+            if (str[i] == '(' || str[i] == '[' || str[i] == '{') {
+                st.push(str[i]);
+            } 
+            else {
+                if (st.empty()) return false;
+                char ch = st.top();
+                if (!isMatched(ch, str[i])) return false;
+                    
+                st.pop();    
+            }
+        }
+        
+        return st.empty();
     }
 };
