@@ -13,6 +13,7 @@ public:
             if (!st.empty()) {
                 ans[idx] = st.top();
             }
+            
             st.push(arr[idx]);
         }
 
