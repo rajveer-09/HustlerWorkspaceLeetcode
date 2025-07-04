@@ -6,7 +6,7 @@ public:
         stack<int> stk;
 
         for(int i = n - 1; i >= 0; i--){
-            while(!stk.empty() && stk.top() < nums2[i]){
+            while(!stk.empty() && stk.top() <= nums2[i]){ // stk.top() <= nums2[i]) equality !
                 stk.pop();
             }
 
