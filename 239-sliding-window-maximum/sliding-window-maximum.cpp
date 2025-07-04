@@ -1,6 +1,6 @@
 class Solution {
 public:
-    vector<int> maxSlidingWindow(vector<int>& nums, int k){
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         priority_queue<pair<int, int>> pq;
         vector<int> ans;
 
