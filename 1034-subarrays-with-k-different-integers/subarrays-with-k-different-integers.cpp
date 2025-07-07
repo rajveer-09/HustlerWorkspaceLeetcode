@@ -1,32 +1,33 @@
 class Solution {
 public:
-    
-    int countSubarraysWithAtMostKDistinct(vector<int>& nums, int k){
-        int n=nums.size();
-        
-        unordered_map<int, int> mp;
-        
-        int i=0, j=0;
-        
-        int c=0;
-        
-        while(j<n){
-            mp[nums[j]]++;
-            
-            while(i<=j && mp.size()>k){
-                if(--mp[nums[i]] == 0) mp.erase(nums[i]);
-                i++;
+    int kDistinctChar(vector<int> s, int k) {
+        int ans = 0;
+        unordered_map<int, int> mpp;
+        int st = 0;
+
+        for(int i = 0; i < s.size(); i++){
+            mpp[s[i]]++;
+
+            while(mpp.size() > k){
+                mpp[s[st]]--;
+                if(mpp[s[st]] == 0){
+                    mpp.erase(s[st]);
+                }
+                st++;
             }
-            
-            c += (j-i+1);
-            
-            j++;
+
+            ans += (i - st + 1);
+            // counting the number of valid subarrays that end at index i
+            // Hence using while loop to shrink is mandatory to get valid ans for here
+            // we cam optimise while with 'if' in case of finding longest problems
         }
-        
-        return c;
+
+        return ans;
     }
-    
+
     int subarraysWithKDistinct(vector<int>& nums, int k) {
-        return countSubarraysWithAtMostKDistinct(nums,k)-countSubarraysWithAtMostKDistinct(nums,k-1);
+        // concept-> countExactlyK = countAtMostK(K) - countAtMostK(K - 1)
+        
+        return kDistinctChar(nums, k) - kDistinctChar(nums, k - 1);
     }
 };
