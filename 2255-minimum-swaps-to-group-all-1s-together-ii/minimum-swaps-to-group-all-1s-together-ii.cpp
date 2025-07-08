@@ -1,24 +1,20 @@
 class Solution {
 public:
     int minSwaps(vector<int>& nums) {
-        vector<int> arr(nums.begin(), nums.end());
-        // for(int num : nums){
-        //     arr.push_back(num);
-        // }
-
+        int n = nums.size();
         int tt = accumulate(nums.begin(), nums.end(), 0);
 
         int cnt = 0;
         int st = 0;
         int ans = 0;
 
-        for(int i = 0; i < arr.size() * 2; i++){
-            cnt += arr[i % arr.size()];
+        for(int i = 0; i < n * 2; i++){
+            cnt += nums[i % n];
 
             if(i - st + 1 == tt){
                 ans = max(ans, cnt);
 
-                cnt -= arr[st % arr.size()];
+                cnt -= nums[st % n];
                 st++;
             }
         }
