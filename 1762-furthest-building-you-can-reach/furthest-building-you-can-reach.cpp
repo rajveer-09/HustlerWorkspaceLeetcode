@@ -1,29 +1,28 @@
 class Solution {
 public:
     int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
-        std::priority_queue<int> minHeap;
+        priority_queue<int, vector<int>, greater<int>> pq;
 
-        for (int i = 0; i < heights.size() - 1; ++i) {
-            int diff = heights[i + 1] - heights[i];
+        for(int i = 0; i < heights.size() - 1; i++){
+            int gap = heights[i + 1] - heights[i];
 
-            if (diff > 0) {
-                if (ladders > 0) {
-                    minHeap.push(-diff);
-                    ladders--;
-                } else if (!minHeap.empty() && -minHeap.top() < diff) {
-                    bricks += minHeap.top();
-                    minHeap.pop();
-                    minHeap.push(-diff);
-                } else {
-                    bricks -= diff;
+            if(gap > 0){
+                pq.push(gap);
+
+                if(pq.size() > ladders){
+                    bricks -= pq.top();
+                    pq.pop();
                 }
-
-                if (bricks < 0) {
-                    return i;
-                }
+                // Not enough bricks? Stop here
+                if(bricks < 0) return i;
             }
         }
 
         return heights.size() - 1;
     }
 };
+/*
+ham ladders ka use krke jarhe hain....but agr kahi ladder khtm hogya toh..
+ham assume krenge ki abi tk ke smaller jumps hamne bricks se kra
+
+*/
