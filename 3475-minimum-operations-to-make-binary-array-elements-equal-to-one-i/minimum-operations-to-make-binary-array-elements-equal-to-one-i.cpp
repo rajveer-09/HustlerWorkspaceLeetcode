@@ -2,8 +2,7 @@ class Solution {
 public:
     int minOperations(vector<int>& nums) {
         int n = nums.size();
-        int lastZero = -1;
-        int lastOne = -1;
+
         int ans = 0;
         int st = 0;
 
@@ -16,7 +15,7 @@ public:
                     nums[i - 1] = 1 - nums[i - 1];
 
                 }
-                
+
                 st++;
             }
         }
