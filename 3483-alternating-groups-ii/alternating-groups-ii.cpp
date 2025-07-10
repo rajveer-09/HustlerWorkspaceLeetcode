@@ -11,8 +11,6 @@ public:
             int prev = colors[(i - 1) % n];
             int curr = colors[i % n];
 
-            if(cnt >= k) ans++;
-
             if (curr != prev) {
                 cnt++;
             } 
@@ -20,7 +18,9 @@ public:
                 cnt = 1;
             }
 
-            if (i == n + k  - 1) {
+            if(cnt >= k) ans++;
+
+            if (i == (n - 1) + (k - 1)) {
                 break;
             }
         }
