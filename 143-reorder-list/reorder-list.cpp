@@ -1,42 +1,53 @@
 class Solution {
 public:
-    ListNode* reverseList(ListNode* head) {
+    ListNode* reverse(ListNode* head){
         ListNode* prev = NULL;
-        while (head) {
+
+        while(head){
             ListNode* nxt = head->next;
+
             head->next = prev;
             prev = head;
             head = nxt;
         }
+
         return prev;
+    }
+    ListNode* middleNode(ListNode* head){
+        ListNode* slow= head;
+        ListNode* fast = head;
+
+        while(fast != NULL && fast->next != NULL){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return slow;
     }
 
     void reorderList(ListNode* head) {
         if (!head || !head->next || !head->next->next) return;
 
-        // Step 1: Find middle
-        ListNode* slow = head;
-        ListNode* fast = head;
-        while (fast->next && fast->next->next) {
-            slow = slow->next;
-            fast = fast->next->next;
-        }
+        ListNode* mid = middleNode(head);
+        ListNode* second = reverse(mid);
 
-        // Step 2: Reverse second half
-        ListNode* second = reverseList(slow);
-        // slow->next = NULL; // cut the first half
+        cout<<"second "<<second->val<<endl;
 
-        // Step 3: Merge two halves
-        ListNode* first = head;
-        while (first) {
-            ListNode* tmp1 = first->next;
-            ListNode* tmp2 = second->next;
+        ListNode* dummy = new ListNode(0);
+        ListNode* temp = dummy;
 
-            first->next = second;
-            second->next = tmp1;
-
-            first = tmp1;
-            second = tmp2;
+        while(second){
+            if(head == second){
+                temp->next = second;
+                break;
+            }
+            
+            temp->next = head;
+            head = head->next;
+            temp = temp->next;
+            temp->next = second;
+            temp = temp->next;
+            second = second->next;
         }
     }
 };
