@@ -1,53 +1,63 @@
 class Solution {
 public:
-    pair<ListNode*, ListNode*> reverseList(ListNode* start, int k) {
+    ListNode* reverseList(ListNode* start, ListNode* end) {
         ListNode* prev = nullptr;
-        ListNode* curr = start;
-        while (k-- && curr != nullptr) {
-            ListNode* nextTemp = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = nextTemp;
+        ListNode* current = start;
+        ListNode* groupEnd = end->next;
+        
+        while (current != groupEnd) {
+            ListNode* nextNode = current->next;
+            current->next = prev;
+
+            prev = current;
+            current = nextNode;
         }
-        return {prev, start};
+        
+        start->next = groupEnd;
+        return prev;
     }
-
+    
     ListNode* reverseEvenLengthGroups(ListNode* head) {
-
+        if (!head || !head->next) return head;
+        
         ListNode* dummy = new ListNode(0);
-        ListNode* prevHead = head;
         dummy->next = head;
-        auto curr = head;
-        int group = 1;
 
-        while(curr != nullptr){
+        ListNode* prevGroupEnd = dummy;
+        ListNode* current = head;
 
-            int groupSize = 0;
-            ListNode* temp = curr;
+        int groupLen = 1;
+        
+        while (current) {
+            ListNode* groupStart = current;
+            ListNode* groupEnd = current;
+
+            int actualLen = 1;
             
-            while (groupSize < group && temp != nullptr) {
-                temp = temp->next;
-                groupSize++;
+            while (actualLen < groupLen && groupEnd->next) {
+                groupEnd = groupEnd->next;
+                actualLen++;
             }
+            
+            ListNode* nextGroupStart = groupEnd->next;
+            
+            if (actualLen % 2 == 0) {
+                ListNode* reversedStart = reverseList(groupStart, groupEnd);
+                prevGroupEnd->next = reversedStart;
+                prevGroupEnd = groupStart;
 
-            if (groupSize % 2 == 0) {
-               
-                auto [reversedHead, reversedTail] = reverseList(curr, groupSize);
-                prevHead->next = reversedHead;
-                reversedTail->next = temp;
-                prevHead = reversedTail;
-            }
-
+            } 
             else {
-                for(int i = 0; i < groupSize; i++){
-                    prevHead = curr;
-                    curr = curr->next;
-                }
+                prevGroupEnd = groupEnd;
             }
-
-            curr = temp;
-            group++;
+            
+            current = nextGroupStart;
+            groupLen++;
         }
-        return dummy->next;
+        
+        ListNode* result = dummy->next;
+        delete dummy;
+        
+        return result;
     }
 };
