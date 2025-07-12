@@ -1,19 +1,28 @@
 class Solution {
 public:
     ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
-        ListNode* ptr = list1;
-        for (int i = 0; i < a - 1; ++i)
-            ptr = ptr->next;
-        
-        ListNode* qtr = ptr->next;
-        for (int i = 0; i < b - a + 1; ++i)
-            qtr = qtr->next;
-        
-        ptr->next = list2;
-        while (list2->next)
-            list2 = list2->next;
-        list2->next = qtr;
-        
+        ListNode* prevA = list1;
+        for (int i = 1; i < a; ++i) {
+            prevA = prevA->next;
+        }
+
+        ListNode* afterB = prevA;
+        for (int i = 1; i <= b - a + 1; ++i) {
+            afterB = afterB->next;
+        }
+
+        // Connect prevA to list2's head
+        prevA->next = list2;
+
+        // Find tail of list2
+        ListNode* tail = list2;
+        while (tail->next != nullptr) {
+            tail = tail->next;
+        }
+
+        // Connect list2's tail to afterB's next
+        tail->next = afterB->next;
+
         return list1;
     }
 };
