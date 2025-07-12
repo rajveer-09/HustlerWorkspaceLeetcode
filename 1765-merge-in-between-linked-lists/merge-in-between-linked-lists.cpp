@@ -8,7 +8,10 @@ public:
 
         ListNode* afterB = prevA;
         for (int i = 1; i <= b - a + 1; ++i) {
+            ListNode* temp = afterB;
             afterB = afterB->next;
+            
+            if(i != 1) delete(temp);
         }
 
         // Connect prevA to list2's head
