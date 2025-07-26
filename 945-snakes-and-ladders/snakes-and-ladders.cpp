@@ -1,41 +1,45 @@
 class Solution {
 public:
+    pair<int, int> getCoordinate(int num, int n) {
+        int rowFromBottom = (num - 1) / n;
+        int colInRow = (num - 1) % n;
+
+        int actualRow = n - 1 - rowFromBottom;
+        int actualCol = (rowFromBottom % 2 == 0) ? colInRow : (n - 1 - colInRow);
+
+        return {actualRow, actualCol};
+    }
+
     int snakesAndLadders(vector<vector<int>>& board) {
         int n = board.size();
-        int lbl = 1;
-        vector<pair<int, int>> cells(n * n + 1);
-        vector<int> columns(n);
+        vector<int> vis(n * n + 1, 0);
+        queue<pair<int, int>> q;
 
-        // Fill columns vector and cells map
-        for (int i = 0; i < n; i++) columns[i] = i;
-        for (int row = n - 1; row >= 0; row--) {
-            for (int column : columns) {
-                cells[lbl++] = {row, column};
-            }
-            reverse(columns.begin(), columns.end());
-        }
-
-        vector<int> dist(n * n + 1, -1);
-        dist[1] = 0;
-        queue<int> q;
-        q.push(1);
+        q.push({1, 0});
+        vis[1] = 1;
 
         while (!q.empty()) {
-            int curr = q.front();
+            auto [node, steps] = q.front();
             q.pop();
 
-            // Explore up to 6 moves ahead
-            for (int next = curr + 1; next <= min(curr + 6, n * n); next++) {
-                auto [row, column] = cells[next];
-                int destination = board[row][column] != -1 ? board[row][column] : next;
+            if (node == n * n) return steps;
 
-                if (dist[destination] == -1) {
-                    dist[destination] = dist[curr] + 1;
-                    q.push(destination);
+            for (int i = 1; i <= 6; ++i) {
+                int newNode = node + i;
+                if (newNode > n * n) continue;
+
+                auto [row, col] = getCoordinate(newNode, n);
+                if (board[row][col] != -1) {
+                    newNode = board[row][col];
+                }
+
+                if (!vis[newNode]) {
+                    vis[newNode] = 1;
+                    q.push({newNode, steps + 1});
                 }
             }
         }
 
-        return dist[n * n];
+        return -1;
     }
 };
