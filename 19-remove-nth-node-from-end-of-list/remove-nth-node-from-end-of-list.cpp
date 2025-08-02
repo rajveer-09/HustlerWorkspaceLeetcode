@@ -1,7 +1,6 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        if(n == 1 && !head->next) return NULL;
         
         ListNode* slow = head;
         ListNode* fast = head;
