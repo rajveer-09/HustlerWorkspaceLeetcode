@@ -22,3 +22,8 @@ public:
         return cnt;
     }
 };
+/*
+-> sabse bhaari bande ko...sabse halke se saath pair kro...this this optimla choice here and greedy !!
+
+
+*/
