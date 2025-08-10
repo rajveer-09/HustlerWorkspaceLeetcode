@@ -1,37 +1,47 @@
-#pragma GCC optimize("O3", "unroll-loops")
 class Solution {
 public:
-    int maximalRectangle(vector<vector<char>>& matrix) {
-        const unsigned short row=matrix.size(), col=matrix[0].size();
-        if (row==1 && col==1) return matrix[0][0]=='1';
-        vector<unsigned short> h(col+1);//height 
-        int maxArea=0;
+    int largestRectangleArea(vector<int>& heights) {
+        int n = heights.size();
+        stack<int> st;
+        int maxArea = 0;
 
-        for(int i=0; i<row; i++){
-            vector<int> st={-1}; //stack will not be empty
-            for (int j=0; j<=col; j++){
-                // Count the successive '1's & store in h[j]
-                h[j]=(j==col||matrix[i][j]=='0')?0:h[j]+1;
+        for (int i = 0; i <= n; ++i) {
+            int h = (i == n) ? 0 : heights[i];
 
-                // monotonic stack has at least element -1
-                while(st.size()>1 && (j==col||h[j]<h[st.back()])){
-                    const int m=st.back();
-                    st.pop_back();
-                    const int w=j-st.back()-1;
-                    const int area=h[m]*w;
-                    maxArea=max(maxArea, area);
-                }
-                st.push_back(j);
+            while (!st.empty() && heights[st.top()] > h) {
+                int height = heights[st.top()];
+                st.pop();
+                int width = st.empty() ? i : i - st.top() - 1;
+                maxArea = max(maxArea, height * width);
             }
+            st.push(i);
         }
+
+        return maxArea;
+    }
+
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if (matrix.empty()) {
+            return 0;
+        }
+
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        vector<int> heights(cols, 0);
+        int maxArea = 0;
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                if (matrix[i][j] == '1') {
+                    heights[j]++;
+                } else {
+                    heights[j] = 0;
+                }
+            }
+            
+            maxArea = max(maxArea, largestRectangleArea(heights));
+        }
+
         return maxArea;
     }
 };
-
-
-auto init = []() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    return 'c';
-}();
