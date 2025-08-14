@@ -1,25 +1,35 @@
 class Solution {
 public:
-    TreeNode* solve(vector<int>& pre, int ps, int pe, vector<int>& in, int is, int ie, unordered_map<int, int>& mp) {
+    int findIdx(vector<int>& inorder, int st, int ed, int& node){
+        for(int i = st; i <= ed; i++){
+            if(inorder[i] == node){
+                return i;
+            }
+        }
+        return -1;
+    }
+// pre order aur inorder se root banao
+    TreeNode* build(vector<int>& preorder, vector<int>& inorder, int& idx, int st, int ed){
+        if(idx >= preorder.size()) return NULL;
+        if(st > ed) return NULL;
 
-        if (ps > pe || is > ie) return nullptr;
+        TreeNode* root = new TreeNode(preorder[idx]);
+        int idxx = findIdx(inorder, st, ed, root->val);
 
-        TreeNode* root = new TreeNode(pre[ps]);
-        int inRoot = mp[root->val];
-        int leftCnt = inRoot - is;
-
-        root->left = solve(pre, ps + 1, ps + leftCnt, in, is, inRoot - 1, mp);
-        root->right = solve(pre, ps + leftCnt + 1, pe, in, inRoot + 1, ie, mp);
+        root->left = build(preorder, inorder, ++idx, st, idxx - 1);
+        // left part jab complete build ho chuka hoga..aur ham ++idx ke saath jayenge 
+        // to vo build nahi hoga...usi idx se ham right side build krnege 
+        root->right = build(preorder, inorder, idx, idxx + 1, ed);
 
         return root;
-    }
 
-    TreeNode* buildTree(vector<int>& pre, vector<int>& in) {
-        ios_base::sync_with_stdio(false);
-        unordered_map<int, int> mp;
-        for (int i = 0; i < in.size(); ++i) {
-            mp[in[i]] = i;
-        }
-        return solve(pre, 0, pre.size() - 1, in, 0, in.size() - 1, mp);
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        int n = preorder.size();
+        int idx = 0;
+
+        TreeNode* root = build(preorder, inorder, idx, 0, n - 1);
+
+        return root;
     }
 };
