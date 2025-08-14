@@ -1,71 +1,45 @@
 class Solution {
-    vector<int> parent;
-    vector<int> rank;
-    int count;
-    
 public:
+    void dfs(vector<vector<int>>& g, int i, int j, int n) {
+        if (i < 0 || i >= n || j < 0 || j >= n || g[i][j] == 1) {
+            return;
+        }
+        g[i][j] = 1;
+
+        dfs(g, i + 1, j, n);
+        dfs(g, i - 1, j, n);
+        dfs(g, i, j + 1, n);
+        dfs(g, i, j - 1, n);
+    }
     int regionsBySlashes(vector<string>& grid) {
         int n = grid.size();
-        int dots = n + 1;
-        parent.resize(dots * dots);
-        rank.resize(dots * dots, 1);
-        count = 0;
-
-        // Initialize Union-Find structure
-        for (int i = 0; i < parent.size(); ++i) {
-            parent[i] = i;
-        }
-
-        // Connect boundaries to the top-left corner (0,0)
-        for (int i = 0; i < dots; ++i) {
-            for (int j = 0; j < dots; ++j) {
-                if (i == 0 || j == 0 || i == n || j == n) {
-                    int cell = i * dots + j;
-                    unionSets(0, cell);
-                }
-            }
-        }
-
-        // Process each cell and connect regions based on slashes
+        vector<vector<int>> g(n * 3, vector<int>(n * 3, 0));
+        
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
-                if (grid[i][j] == '\\') {
-                    int cell1 = i * dots + j;
-                    int cell2 = (i + 1) * dots + (j + 1);
-                    unionSets(cell1, cell2);
-                } else if (grid[i][j] == '/') {
-                    int cell1 = (i + 1) * dots + j;
-                    int cell2 = i * dots + (j + 1);
-                    unionSets(cell1, cell2);
+                if (grid[i][j] == '/') {
+                    g[i * 3][j * 3 + 2] = 1;
+                    g[i * 3 + 1][j * 3 + 1] = 1;
+                    g[i * 3 + 2][j * 3] = 1;
+                } 
+                else if (grid[i][j] == '\\') {
+                    g[i * 3][j * 3] = 1;
+                    g[i * 3 + 1][j * 3 + 1] = 1;
+                    g[i * 3 + 2][j * 3 + 2] = 1;
                 }
             }
         }
-
-        return count;
-    }
-    
-private:
-    void unionSets(int a, int b) {
-        int parentA = find(a);
-        int parentB = find(b);
-        if (parentA == parentB) {
-            count++;
-        } else {
-            if (rank[parentA] > rank[parentB]) {
-                parent[parentB] = parentA;
-            } else if (rank[parentA] < rank[parentB]) {
-                parent[parentA] = parentB;
-            } else {
-                parent[parentB] = parentA;
-                rank[parentA]++;
+        
+        int regions = 0;
+        for (int i = 0; i < n * 3; ++i) {
+            for (int j = 0; j < n * 3; ++j) {
+                if (g[i][j] == 0) {
+                    regions++;
+                    dfs(g, i, j, n * 3);
+                }
             }
         }
+        return regions;
     }
     
-    int find(int a) {
-        if (parent[a] == a) {
-            return a;
-        }
-        return parent[a] = find(parent[a]);
-    }
 };
