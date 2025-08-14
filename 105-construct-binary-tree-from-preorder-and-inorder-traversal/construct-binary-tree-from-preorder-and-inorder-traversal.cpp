@@ -16,7 +16,9 @@ public:
         TreeNode* root = new TreeNode(preorder[idx]);
         int idxx = findIdx(inorder, st, ed, root->val);
 
-        root->left = build(preorder, inorder, ++idx, st, idxx - 1);
+        idx++;
+
+        root->left = build(preorder, inorder, idx, st, idxx - 1);
         // left part jab complete build ho chuka hoga..aur ham ++idx ke saath jayenge 
         // to vo build nahi hoga...usi idx se ham right side build krnege 
         root->right = build(preorder, inorder, idx, idxx + 1, ed);
