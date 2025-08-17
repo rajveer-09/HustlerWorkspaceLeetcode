@@ -1,15 +1,20 @@
 class Solution {
 public:
+    //  f(n) = min[f(n - 1) , f(n - 2)] + cost[i];
+
+    int solve(int n, vector<int>& cost, vector<int>& dp){
+        if(n <= 1) return cost[n];
+
+        if(dp[n] != -1) return dp[n];
+
+        return dp[n] = cost[n] + min(solve(n - 1, cost, dp), solve(n - 2, cost, dp)); 
+    }
     int minCostClimbingStairs(vector<int>& cost) {
-        int n= cost.size();
-        vector<int> dp(n+1);
-        dp[0] = cost[0];
-        dp[1] = cost[1];
+        int n = cost.size();
+        cost.push_back(0);
 
-        for(int i=2;i<n;i++){
-            dp[i] = cost[i] + min(dp[i-1], dp[i-2]);
-        }
+        vector<int>dp(n + 1, -1);
 
-        return min(dp[n-1], dp[n-2]);
+        return solve(n, cost, dp);
     }
 };
