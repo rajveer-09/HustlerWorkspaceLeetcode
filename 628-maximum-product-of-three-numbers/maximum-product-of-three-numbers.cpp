@@ -10,3 +10,8 @@ public:
         return max(p1, p2);
     }
 };
+
+/*
+1. Agr sirf pos hai toh...last ke 3 
+2. agr neg b hai toh... ya toh last ke 3 ya start k 2 and last
+*/
