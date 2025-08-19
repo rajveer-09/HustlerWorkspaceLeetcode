@@ -1,17 +1,26 @@
 class Solution {
 public:
-    bool checkSubarraySum(vector<int>& nums, int k) 
-    {
-        map<int,int>mp;
-        mp[0] = -1;
-        int sum = 0, n = nums.size(), mod;
-        for(int i=0;i<n;i++)
-        {
+    bool checkSubarraySum(vector<int>& nums, int k) {
+        unordered_map<int, int> mpp;
+        mpp[0] = -1;
+        long long sum = 0;
+
+        for(int i = 0; i < nums.size(); i++){
             sum += nums[i];
-            mod = sum % k;
-            if(mp.find(mod) == mp.end()) mp[mod] = i;
-            else if((i - mp[mod]) > 1) return true;
+
+            int rem = (sum % k + k) % k;
+            // sum can be neg and hence sum % k can be neg
+
+            if(mpp.count(rem)){
+                if(i - mpp[rem]  >= 2) return true;
+            }
+            else{
+                mpp[rem] = i;
+            }
+
+            
         }
+
         return false;
     }
 };
