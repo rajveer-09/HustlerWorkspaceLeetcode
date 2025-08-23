@@ -1,34 +1,35 @@
 class Solution {
 public:
-    void rec(int i, int target, vector<int>& arr, vector<int>& ds, vector<vector<int>>& ans) {
-        if (i >= arr.size()) {
-            if(target == 0) ans.push_back(ds);
-            
+    vector<vector<int>> ans;
+    int n;
+
+    void solve(vector<int>& candidates, int idx, int target, vector<int>& tmp) {
+        if (idx >= n || target < 0) {
+            if (target == 0 && !tmp.empty()) {
+                ans.push_back(tmp);
+            }
             return;
         }
 
-        // TAKE
-        if (arr[i] <= target) {
-            ds.push_back(arr[i]);
-            rec(i + 1, target - arr[i], arr, ds, ans);
-            ds.pop_back();
-        }
+        // take
+        tmp.push_back(candidates[idx]);
+        solve(candidates, idx + 1, target - candidates[idx], tmp);
+        tmp.pop_back();
 
-        // NOT TAKE: skip all duplicates at same level
-        int j = i + 1;
+        // skip duplicates
+        int nxtIdx = idx + 1;
+        while (nxtIdx < n && candidates[nxtIdx] == candidates[idx]) nxtIdx++;
 
-        while (j < arr.size() && arr[j] == arr[i]) j++;
-
-        rec(j, target, arr, ds, ans);
+        // skip
+        solve(candidates, nxtIdx, target, tmp);
     }
 
-    vector<vector<int>> combinationSum2(vector<int>& arr, int target) {
-        sort(arr.begin(), arr.end()); // sort for duplicates handling
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        n = candidates.size();
 
-        vector<vector<int>> ans;
-        vector<int> ds;
-
-        rec(0, target, arr, ds, ans);
+        vector<int> tmp;
+        solve(candidates, 0, target, tmp);
 
         return ans;
     }
