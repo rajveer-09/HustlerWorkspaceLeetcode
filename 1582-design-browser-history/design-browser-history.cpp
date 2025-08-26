@@ -1,32 +1,25 @@
 class BrowserHistory {
 public:
-    stack<string>stk1, stk2;
+    vector<string> pages;
+    int curr; // currently we are this index
     BrowserHistory(string homepage) {
-        stk1.push(homepage);
+        pages.push_back(homepage);
+        curr = 0;
     }
     
     void visit(string url) {
-        stk1.push(url);
-        stack<string> stk;
-        stk2 = stk;
+        pages.resize(curr + 2);
+        pages[++curr] = url;
     }
     
     string back(int steps) {
-        while(steps && stk1.size() > 1){
-            stk2.push(stk1.top());
-            stk1.pop();
-            steps--;
-        }
-        return stk1.top();
+        curr = max(0, curr - steps);
+        return pages[curr];
     }
     
     string forward(int steps) {
-        while(steps && stk2.size() > 0){
-            stk1.push(stk2.top());
-            stk2.pop();
-            steps--;
-        }
-        return stk1.top();
+        curr = min(curr + steps, (int)pages.size() - 1);
+        return pages[curr];
     }
 };
 
