@@ -1,28 +1,37 @@
 class SnapshotArray {
-private:
-    vector<map<int, int>> history;
-    int snap_id_counter;
-
 public:
+    int snap_id;
+    vector<vector<pair<int, int>>> vec;
+
     SnapshotArray(int length) {
-        history.resize(length);
-        for(int i = 0; i < length; ++i) {
-            history[i][0] = 0;
+        snap_id = 0;
+        vec.resize(length);
+        for (int i = 0; i < length; i++) {
+            vec[i].push_back(make_pair(0, 0));
         }
-        snap_id_counter = 0;
     }
-    
+
     void set(int index, int val) {
-        history[index][snap_id_counter] = val;
+        vec[index].push_back(make_pair(snap_id, val));
     }
-    
-    int snap() {
-        return snap_id_counter++;
-    }
-    
+
+    int snap() { return snap_id++; }
+
     int get(int index, int snap_id) {
-        auto it = history[index].upper_bound(snap_id);
-        --it;
-        return it->second;
+        int l = 0, r = vec[index].size() - 1;
+
+        int result = 0;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+
+            if (vec[index][mid].first <= snap_id) {
+                result = vec[index][mid].second;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+
+        return result;
     }
 };
