@@ -1,50 +1,39 @@
 class RandomizedSet {
- vector<int> v;
-    unordered_map<int,int> mp;
+private:
+    unordered_map<int, int> pos;
+    vector<int> vals;
 public:
-   
     RandomizedSet() {
+        
     }
-
-    bool search(int val){
-
-         if(mp.find(val)!=mp.end())
-            return true;
-         return false;
-
-    }
-
     
     bool insert(int val) {
-
-        if(search(val))
+        if (pos.count(val)) {
             return false;
-
-        v.push_back(val);
-        mp[val] = v.size()-1;
+        }
+        vals.push_back(val);
+        pos[val] = vals.size() - 1;
         return true;
     }
-
     
     bool remove(int val) {
-
-        if(!search(val))
+        if (!pos.count(val)) {
             return false;
+        }
+        int last = vals.back();
+        int idx = pos[val];
 
-       
-        auto it = mp.find(val);
-        v[it->second] = v.back();
-        v.pop_back();
-        mp[v[it->second]] = it->second;
-        mp.erase(val);
+        vals[idx] = last;
+        pos[last] = idx;
+
+        vals.pop_back();
+        pos.erase(val);
+        
         return true;
     }
-
-   
+    
     int getRandom() {
-
-        return v[rand()%v.size()];
-        
+        return vals[rand() % vals.size()];
     }
 };
 
