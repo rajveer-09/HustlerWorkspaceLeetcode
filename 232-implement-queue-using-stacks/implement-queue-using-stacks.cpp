@@ -7,7 +7,9 @@ public:
     void push(int x) {
         stk1.push(x);
     }
-    
+    // Lazy Transfer
+    // bottom ke kuchh stack 2 me baaki stack 1 me
+    // 1 2 3 4 5 6 => [4 5 6]stk1  [3 2 1]stk2
     int pop() {
         if (stk2.empty()) {
             while (!stk1.empty()) {
