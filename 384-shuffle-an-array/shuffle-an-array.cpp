@@ -12,7 +12,7 @@ public:
         nums = original;
         return nums;
     }
-    
+    // Fisher-Yates algorithm
     vector<int> shuffle() {
         vector<int> shuffled = nums;
         for (int i = shuffled.size() - 1; i > 0; i--) {
