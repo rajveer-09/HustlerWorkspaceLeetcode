@@ -1,69 +1,49 @@
 class Solution {
 public:
-    unordered_map<TreeNode*, TreeNode*> pp;
-    void preOrdere(TreeNode* root){
-        if(!root) return;
+    vector<int> ans;
 
-        if(root->left){
-            pp[root->left] = root;
-        }
-        if(root->right){
-            pp[root->right] = root;
-        }
-
-        preOrdere(root->left);
-        preOrdere(root->right);
-    }
-    void bfs(TreeNode* start, int k, vector<int>& ans){
-        if(!start) return;
-
-        queue<TreeNode*> q;
-        unordered_map<TreeNode*, bool> vis;
-
-        q.push(start);
-        vis[start] = true;
-
-        while(!q.empty()){
-            int n = q.size();
-
-            for(int i = 0; i < n; i++){
-                TreeNode* node = q.front();
-                q.pop();
-
-                if(node->left && !vis.count(node->left)){
-                    q.push(node->left);
-                    vis[node->left] =true;
-                } 
-                if(node->right && !vis.count(node->right)) {
-                    q.push(node->right);
-                    vis[node->right] =true;
-                }
-                if(pp.count(node) && !vis.count(pp[node])) {
-                    q.push(pp[node]);
-                    vis[pp[node]] =true;
-                }
-            }
-
-            k--;
-
-            if(k == 0) break;
-        }
-
-        while(!q.empty()){
-            ans.push_back(q.front()->val);
-            q.pop();
-        }
-    }
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        if(k == 0) return {target->val};
-
-        vector<int> ans;
-        pp.clear();
-
-        preOrdere(root);
-        
-        bfs(target, k, ans);
-
+        dfs(root, target, k);
         return ans;
+    }
+
+private:
+    // collect all nodes k distance below current node
+    void subtreeAdd(TreeNode* node, int dist, int k) {
+        if (!node) return;
+        if (dist == k) {
+            ans.push_back(node->val);
+            return;
+        }
+        subtreeAdd(node->left, dist+1, k);
+        subtreeAdd(node->right, dist+1, k);
+    }
+
+    // returns distance of target from current node, or -1 if not found
+    int dfs(TreeNode* root, TreeNode* target, int k) {
+        if (!root) return -1;
+
+        if (root == target) {
+            subtreeAdd(root, 0, k); // collect all k distance down
+            return 0;
+        }
+
+        // check left subtree
+        int left = dfs(root->left, target, k);
+        if (left != -1) {
+            if (left + 1 == k) ans.push_back(root->val); // root is at distance k
+            else subtreeAdd(root->right, left+2, k);     // check right subtree
+            return left + 1;
+        }
+
+        // check right subtree
+        int right = dfs(root->right, target, k);
+        if (right != -1) {
+            if (right + 1 == k) ans.push_back(root->val);
+            else subtreeAdd(root->left, right+2, k);
+            return right + 1;
+        }
+
+        return -1; // target not found
     }
 };
