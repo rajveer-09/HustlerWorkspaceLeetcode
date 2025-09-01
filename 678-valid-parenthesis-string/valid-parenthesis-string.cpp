@@ -1,30 +1,35 @@
 class Solution {
 public:
     bool checkValidString(string s) {
-        int low = 0, high = 0;
+        stack<int> left, star;
+        // storing index
 
-        for(char ch : s){
-            if(ch == '('){
-                low++;
-                high++;
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] == '(') {
+                left.push(i);
+            } 
+            else if (s[i] == '*') {
+                star.push(i);
+            } 
+            else { // ')'
+                if (!left.empty()) {
+                    left.pop();
+                } 
+                else if (!star.empty()) {
+                    star.pop();
+                } 
+                else {
+                    return false;
+                }
             }
-            else if(ch == ')'){
-                low--;
-                high--;
-            }
-            else{ // '*'
-                low--;   // use '*' as ')'
-                high++;  // use '*' as '('
-            }
-
-            if(high < 0) return false;   // too many ')'
-            low = max(low, 0);           // can't go below 0
+        }
+        // Match remaining '(' with '*'
+        while (!left.empty() && !star.empty()) {
+            if (left.top() > star.top()) return false; // order invalid
+            left.pop();
+            star.pop();
         }
 
-        return low == 0;
+        return left.empty();
     }
 };
-/*
-=>low: minimum possible open count (treat * as ))
-=>high: maximum possible open count (treat * as ()
-*/
