@@ -1,41 +1,19 @@
 class Solution {
 public:
-    TreeNode* solve(TreeNode* root, unordered_set<int>& set){
-        if(!root) return NULL;
+    pair<TreeNode*, int> dfs(TreeNode* root) {
+        if (!root) return {nullptr, 0};
 
-        if(set.count(root->val)) return root;
+        auto left = dfs(root->left);
+        auto right = dfs(root->right);
 
-        TreeNode* lh = solve(root->left, set);
-        TreeNode* rh = solve(root->right, set);
+        if (left.second > right.second) return {left.first, left.second + 1};
+        if (right.second > left.second) return {right.first, right.second + 1};
 
-        if(lh && rh) return root;
-
-        if(!lh) return rh;
-
-        return lh;
+        // If depths are equal, current node is LCA
+        return {root, left.second + 1};
     }
+
     TreeNode* subtreeWithAllDeepest(TreeNode* root) {
-        queue<TreeNode*> q;
-
-        q.push(root);
-        unordered_set<int> st;
-
-        while(!q.empty()){
-            int n = q.size();
-            st.clear();
-
-            for(int i = 0; i < n; i++){
-                TreeNode* node = q.front();
-                q.pop();
-                st.insert(node->val);
-
-                if(node->left) q.push(node->left);
-                if(node->right) q.push(node->right);
-            }
-        }
-
-        TreeNode* ans = solve(root, st);
-
-        return ans;
+        return dfs(root).first;
     }
 };
