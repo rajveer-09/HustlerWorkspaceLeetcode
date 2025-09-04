@@ -1,32 +1,64 @@
+class TrieNode {
+public:
+    TrieNode* children[26];
+    bool isTerminal;
+    
+    TrieNode() {
+        for (int i = 0; i < 26; i++) {
+            children[i] = nullptr;
+        }
+        isTerminal = false;
+    }
+};
+
+class Trie {
+public:
+    TrieNode* root;
+
+    Trie() {
+        root = new TrieNode();
+    }
+
+    void insert(string word) {
+        TrieNode* node = root;
+        for (char ch : word) {
+            int index = ch - 'a';
+            if (!node->children[index]) {
+                node->children[index] = new TrieNode();
+            }
+            node = node->children[index];
+        }
+        node->isTerminal = true;
+    }
+};
+
 class Solution {
 public:
-    bool memo(string& s, int idx, vector<int>& dp, unordered_map<string, int>& mp) {
-        int n = s.size();
-        if (idx == n) return true;
+    bool wordBreak(string s, vector<string>& wordDict) {
+        Trie t;
+        for (const string& word : wordDict) {
+            t.insert(word);
+        }
         
-        if (dp[idx] != -1) return dp[idx];
-        
-        string tmp = "";
-        for (int i = idx; i < n; ++i) {
-            tmp += s[i];
-            if (mp.count(tmp) && memo(s, i + 1, dp, mp)) {
-                return dp[idx] = true;
+        vector<bool> dp(s.size() + 1, false);
+        dp[0] = true;
+
+        for (int i = 0; i < s.size(); i++) {
+            if (dp[i]) {
+                TrieNode* node = t.root;
+                for (int j = i; j < s.size(); j++) {
+                    int index = s[j] - 'a';
+                    if (!node->children[index]) {
+                        break;
+                    }
+                    node = node->children[index];
+                    if (node->isTerminal) {
+                        dp[j + 1] = true;
+                    }
+                }
             }
         }
         
-        return dp[idx] = false;
-    }
-    
-    bool wordBreak(string s, vector<string>& wordDict) {
-        unordered_map<string, int> mp;
-
-        for (const auto& str : wordDict) {
-            mp[str]++;
-        }
-        
-        int n = s.size();
-        vector<int> dp(n, -1);
-        
-        return memo(s, 0, dp, mp);
+        return dp[s.size()];
     }
 };
