@@ -1,27 +1,34 @@
 class DSU {
-private:
-    vector<int> parent, rankv;
 public:
+    vector<int> parent;
+    vector<int> rank;
     DSU(int n) {
         parent.resize(n);
-        rankv.resize(n, 0);
+        rank.resize(n, 0);
         iota(parent.begin(), parent.end(), 0);
     }
-    int find(int x) {
-        if (parent[x] == x) return x;
-        return parent[x] = find(parent[x]);
+
+    int find(int node) {
+        if (parent[node] == node)
+            return node;
+        return parent[node] = find(parent[node]);
     }
+
     bool unite(int u, int v) {
-        int pu = find(u), pv = find(v);
-        if (pu == pv) return false; // cycle
-        if (rankv[pu] < rankv[pv]) {
-            parent[pu] = pv;
-        } else if (rankv[pu] > rankv[pv]) {
-            parent[pv] = pu;
+        int x = find(u);
+        int y = find(v);
+
+        if (x == y) return false;
+
+        if (rank[x] < rank[y]) {
+            parent[x] = y;
+        } else if (rank[x] > rank[y]) {
+            parent[y] = x;
         } else {
-            parent[pv] = pu;
-            rankv[pu]++;
+            parent[y] = x;
+            rank[x]++;
         }
+
         return true;
     }
 };
@@ -29,35 +36,37 @@ public:
 class Solution {
 public:
     bool validateBinaryTreeNodes(int n, vector<int>& leftChild, vector<int>& rightChild) {
+        vector<int> inDegree(n, 0);
         DSU dsu(n);
-        vector<int> indeg(n, 0);
 
         for (int i = 0; i < n; i++) {
-            if (leftChild[i] != -1) {
-                if (++indeg[leftChild[i]] > 1) return false; // multiple parents
-                if (!dsu.unite(i, leftChild[i])) return false; // cycle
+            int left = leftChild[i];
+            int right = rightChild[i];
+
+            if (left != -1) {
+                inDegree[left]++;
+                if (inDegree[left] > 1 || !dsu.unite(i, left)) return false;
             }
-            if (rightChild[i] != -1) {
-                if (++indeg[rightChild[i]] > 1) return false; // multiple parents
-                if (!dsu.unite(i, rightChild[i])) return false; // cycle
+
+            if (right != -1) {
+                inDegree[right]++;
+                if (inDegree[right] > 1 || !dsu.unite(i, right)) return false;
             }
         }
 
-        // root check: exactly one node with indegree 0
-        int rootCount = 0;
-
-        for (int i = 0; i < n; i++) {
-            if (indeg[i] == 0) rootCount++;
-        }
+        int root = -1;
+        int components = 0;
         
-        if (rootCount != 1) return false;
-
-        // connected check: all nodes must share one root
-        int root = dsu.find(0);
-        for (int i = 1; i < n; i++) {
-            if (dsu.find(i) != root) return false;
+        for (int i = 0; i < n; i++) {
+            if (inDegree[i] == 0) {
+                if (root != -1) return false;
+                root = i;
+            }
+            if (dsu.parent[i] == i) {
+                components++;
+            }
         }
 
-        return true;
+        return root != -1 && components == 1;
     }
 };
