@@ -17,14 +17,27 @@ public:
         }
     }
     vector<string> letterCombinations(string digits) {
+        if(!digits.size()) return {};
+        
         vector<string>keyboard{
             "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"
         };
 
-        vector<string> ans;
-        string temp = "";
+        vector<string> ans {""};
+        // string temp = "";
 
-        solve(digits, 0, temp, ans, keyboard);
+        // solve(digits, 0, temp, ans, keyboard);
+
+        for(char ch : digits){
+            vector<string> temp;
+            for(string& a : ans){
+                for(char c : keyboard[ch - '0']){
+                    temp.push_back(a + c);
+                }
+            }
+
+            ans = temp;
+        }
 
         return ans;
     }
