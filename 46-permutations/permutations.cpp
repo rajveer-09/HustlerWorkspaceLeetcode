@@ -15,10 +15,11 @@ public:
 
     vector<vector<int>> permute(vector<int>& nums) {
         vector<vector<int>> ans;
-        int index = 0;
-
-        solve(nums, ans, index);
-        
+        sort(nums.begin(), nums.end()); // ensures lexicographical order
+        do {
+            ans.push_back(nums);
+        } while (next_permutation(nums.begin(), nums.end()));
         return ans;
     }
+
 };
