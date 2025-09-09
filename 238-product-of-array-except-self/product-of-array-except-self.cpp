@@ -4,16 +4,16 @@ public:
         int n = nums.size();
         vector<int> res(n, 1);
 
-        int left = 1;
-        for (int i = 0; i < n; ++i) {
-            res[i] *= left;
-            left *= nums[i];
+        for (int i = 1; i < n; i++) {
+            res[i] = res[i - 1] * nums[i - 1];
         }
-        int right = 1;
-        for (int i = n - 1; i >= 0; --i) {
-            res[i] *= right;
-            right *= nums[i];
+
+        int postfix = 1;
+        for (int i = n - 1; i >= 0; i--) {
+            res[i] *= postfix;
+            postfix *= nums[i];
         }
+        
         return res;
     }
 };
