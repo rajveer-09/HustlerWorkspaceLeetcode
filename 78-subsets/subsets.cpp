@@ -25,3 +25,8 @@ public:
         return ans;
     }
 };
+/*
+
+-> In mathematics, a power set is the set of all possible subsets of a given set, including the empty set and the original set itself. 
+
+*/
