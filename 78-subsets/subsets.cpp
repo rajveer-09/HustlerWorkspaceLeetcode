@@ -1,32 +1,18 @@
 class Solution {
 public:
-    void rec(vector<int>& nums, int idx, vector<vector<int>>& ans, vector<int>& subset){
-        if(idx >= nums.size()){
-            ans.push_back(subset);
-            return;
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> res = {{}};
+
+        for (int num : nums) {
+            int size = res.size();
+            for (int i = 0; i < size; i++) {
+                vector<int> subset = res[i];
+                
+                subset.push_back(num);
+                res.push_back(subset);
+            }
         }
 
-        // take
-        subset.push_back(nums[idx]);
-        rec(nums, idx + 1, ans, subset);
-        subset.pop_back();
-
-        // not_take
-        rec(nums, idx + 1, ans, subset);
-
-    }
-
-    vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> ans;
-        vector<int> subset;
-
-        rec(nums, 0, ans, subset);
-
-        return ans;
+        return res;
     }
 };
-/*
-
--> In mathematics, a power set is the set of all possible subsets of a given set, including the empty set and the original set itself. 
-
-*/
