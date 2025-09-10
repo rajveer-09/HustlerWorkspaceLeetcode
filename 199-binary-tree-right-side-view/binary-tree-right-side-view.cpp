@@ -1,21 +1,19 @@
 class Solution {
 public:
-    void dfs(TreeNode* node, int lvl, int& maxLvl, vector<int>& ans){
+    void dfs(TreeNode* node, int lvl, vector<int>& ans){
         if(!node) return;
-        if(lvl > maxLvl){
+        if(lvl >= ans.size()){
             ans.push_back(node->val);
-            maxLvl = lvl;
         }
 
-        dfs(node->right, lvl + 1, maxLvl, ans);
-        dfs(node->left, lvl + 1, maxLvl, ans);
+        dfs(node->right, lvl + 1, ans);
+        dfs(node->left, lvl + 1, ans);
 
     }
     vector<int> rightSideView(TreeNode* root) {
         vector<int> ans;
-        int maxLvl = -1;
         
-        dfs(root, 0, maxLvl, ans);
+        dfs(root, 0, ans);
 
         return ans;
     }
