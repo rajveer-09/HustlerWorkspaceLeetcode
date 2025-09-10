@@ -1,16 +1,28 @@
 class Solution {
 public:
     bool isValidBST(TreeNode* root) {
-        return validate(root, LONG_MIN, LONG_MAX);
-    }
+        if (!root) {
+            return true;
+        }
+        // har node pr uske allowed range ko store kro (bfs / dfs)
+        queue<tuple<TreeNode*, long, long>> queue;
+        queue.push(make_tuple(root, LONG_MIN, LONG_MAX));
 
-private:
-    bool validate(TreeNode* node, long min, long max) {
-        if (node == nullptr) return true;
+        while (!queue.empty()) {
+            auto [node, left, right] = queue.front();
+            queue.pop();
 
-        if (node->val <= min || node->val >= max) return false;
+            if (!(left < node->val && node->val < right)) {
+                return false;
+            }
+            if (node->left) {
+                queue.push(make_tuple(node->left, left, node->val));
+            }
+            if (node->right) {
+                queue.push(make_tuple(node->right, node->val, right));
+            }
+        }
 
-        return validate(node->left, min, node->val) &&
-               validate(node->right, node->val, max);
+        return true;
     }
 };
