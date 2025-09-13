@@ -17,10 +17,11 @@ public:
 */
 class Solution {
 public:
+    // Morris Traversal ...
     void flatten(TreeNode* root) {
         if (!root) return;
 
-        TreeNode* curr =root;
+        TreeNode* curr = root;
 
         while(curr){
             if(curr->left){
