@@ -1,29 +1,40 @@
 class Solution {
 public:
-    int memo(vector<vector<int>>& grid, int idx, int col, vector<vector<int>> &dp){
+    int minPathSum(vector<vector<int>>& grid) {
         int n = grid.size();
         int m = grid[0].size();
 
-        if(idx == n-1 && col == m-1) return grid[idx][col];
+        // vector<vector<int>> dp(n, vector<int>(m, -1));
 
-        if(idx >= n || col >= m) return INT_MAX;
+        // dp[0][0] = grid[0][0];
 
-        if (dp[idx][col] != -1) {
-            return dp[idx][col];
+        // for(int i = 1; i < n; i++){
+        //     dp[i][0] = dp[i - 1][0] + grid[i][0];
+        // }
+
+        // for(int j = 1; j < m; j++){
+        //     dp[0][j] = dp[0][j - 1] + grid[0][j];
+        // }
+
+        // for(int i = 1; i < n; i++){
+        //     for(int j = 1; j < m; j++){
+        //         int right = dp[i][j - 1] + grid[i][j];
+        //         int down = dp[i - 1][j] + grid[i][j];
+
+        //         dp[i][j] = min(right, down);
+        //     }
+        // }
+        // return dp[n - 1][m - 1];
+
+        vector<int> dp(m + 1, INT_MAX);
+        dp[m - 1] = 0;
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = m - 1; j >= 0; j--) {
+                dp[j] = grid[i][j] + min(dp[j], dp[j + 1]);
+            }
         }
 
-        int down = memo(grid, idx + 1, col, dp);
-        int right = memo(grid, idx, col + 1, dp);
-
-        return dp[idx][col] = min(down, right) + grid[idx][col];
-    }
-    int minPathSum(vector<vector<int>>& grid) {
-        ios_base::sync_with_stdio(false);
-        int n = grid.size();
-        int m = grid[0].size();
-
-        vector<vector<int>> dp(n, vector<int>(m, -1));
-
-        return memo(grid, 0, 0, dp);
+        return dp[0];
     }
 };
