@@ -1,21 +1,23 @@
 class Solution {
 public:
-    int rob(vector<int>& nums) {
-        int n = nums.size();
-        if (n == 1)
-            return nums[0];
+    int memo(vector<int>& money, int idx, vector<int>& dp){
+        int n = money.size();
+        if(idx >= n) return 0;
+        if(idx == n - 1) return money[n - 1];
 
-        vector<int> dp(n, 0);
-        dp[0] = nums[0];
-        dp[1] = max(nums[0], nums[1]);
+        if(dp[idx] != -1) return dp[idx];
 
-        for (int i = 2; i < n; i++) {
-            int x = nums[i] + dp[i - 2];
-            int y = dp[i - 1];
+        int take  = money[idx] + memo(money, idx + 2, dp);
+        int notTake = memo(money, idx + 1, dp);
 
-            dp[i] = max(x, y);
-        }
+        return dp[idx] = max(take, notTake);
+    }
+    int rob(vector<int>& money) {
+        int n = money.size();
+        vector<int> dp(n, -1);
 
-        return dp[n - 1];
+        int ans = memo(money, 0, dp);
+
+        return ans;
     }
 };
