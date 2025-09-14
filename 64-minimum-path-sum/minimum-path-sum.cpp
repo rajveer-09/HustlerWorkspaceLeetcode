@@ -27,9 +27,14 @@ public:
         // return dp[n - 1][m - 1];
 
         vector<int> dp(m + 1, INT_MAX);
-        dp[m - 1] = 0;
+        dp[m - 1] = grid[n - 1][m -1];
 
-        for (int i = n - 1; i >= 0; i--) {
+        for(int i = m - 2; i >= 0; i--){
+            dp[i] = dp[i + 1] + grid[n - 1][i];
+        }
+        // dp[m - 1] = 0;
+
+        for (int i = n - 2; i >= 0; i--) {
             for (int j = m - 1; j >= 0; j--) {
                 dp[j] = grid[i][j] + min(dp[j], dp[j + 1]);
             }
