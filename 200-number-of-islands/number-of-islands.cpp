@@ -60,6 +60,7 @@ public:
                             nc < COLS && grid[nr][nc] == '1') {
                             if (dsu.unionBySize(index(r, c), index(nr, nc))) {
                                 islands--;
+                                cout<<islands<<" ";
                             }
                         }
                     }
@@ -70,3 +71,12 @@ public:
         return islands;
     }
 };
+/*
+
+->  The algorithm assumes that every '1' is a new, separate island. This is why it initializes islands to 0 and increments it (islands++) for every '1' it encounters.
+
+-> When the algorithm finds two adjacent '1's, it means they belong to the same island. It then performs a union operation on their corresponding sets.
+
+->  If the union operation is successful (meaning the two cells were in different sets and are now merged), it means we have just discovered that two previously assumed separate islands are actually a single one. To correct our count, we must decrement the island counter (islands--).
+
+*/
