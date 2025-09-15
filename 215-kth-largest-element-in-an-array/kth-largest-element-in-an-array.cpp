@@ -1,15 +1,15 @@
 class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
-        ios_base::sync_with_stdio(false);
-        int n = nums.size();
-
+        // nichhe sabse largest ko safe rakhna hai...
         priority_queue<int, vector<int>, greater<int>> pq;
 
-        for(int num : nums){
-            pq.push(num);
+        for(int i = 0; i < nums.size(); i++){
+            pq.push(nums[i]);
 
-            if(pq.size() > k) pq.pop();
+            while(pq.size() > k){
+                pq.pop();
+            }
         }
 
         return pq.top();
