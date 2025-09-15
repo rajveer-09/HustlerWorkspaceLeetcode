@@ -12,14 +12,14 @@ public:
 
         int farthest = 0;
         int curr = 0;
-        int st = -1;
+        int st = 0;
 
         while(curr < n){
             farthest = max(farthest, mpp[s[curr]]);
 
             if(curr == farthest){
-                ans.push_back(curr - st);
-                st = curr;
+                ans.push_back(curr - st + 1);
+                st = curr + 1;
             }
 
             curr++;
