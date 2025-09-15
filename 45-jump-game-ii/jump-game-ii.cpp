@@ -1,26 +1,22 @@
 class Solution {
 public:
     int jump(vector<int>& nums) {
-        if (nums.size() <= 1) {
-            return 0;
-        }
+        int n = nums.size();
+        int jump = 0;
 
-        int jumps = 0;
-        int current_end = 0;
-        int farthest = 0;
-
-        // Iterate through all indices except the last one
-        for (int i = 0; i < nums.size() - 1; ++i) {
-            // Update the farthest reach from the current position
-            farthest = max(farthest, i + nums[i]);
-
-            // If we've reached the end of the current jump's range
-            if (i == current_end) {
-                jumps++;
-                current_end = farthest;
+        for(int i = 0; i < n - 1; i++){
+            int maxi = i + 1;
+            if(i + nums[i] >= n - 1) return jump + 1;
+            for(int j = i + 1; j <= i + nums[i] && j < n; j++){
+                if(nums[maxi] + maxi <= nums[j] + j){
+                    maxi = j;
+                }
             }
+
+            i = maxi - 1;
+            jump++;
         }
-        
-        return jumps;
+
+        return jump;
     }
 };
