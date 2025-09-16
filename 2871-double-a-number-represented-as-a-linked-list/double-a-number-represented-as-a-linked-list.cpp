@@ -1,56 +1,73 @@
 class Solution {
 public:
-    ListNode* doubleIt(ListNode* head) {
-        // Reverse the linked list
-        ListNode* reversedList = reverseList(head);
-        // Initialize variables to track carry and previous node
-        int carry = 0;
-        ListNode* current = reversedList, *previous = nullptr;
+    int dfs(ListNode* node) {
+        if (!node) return 0;
 
-        // Traverse the reversed linked list
-        while (current != nullptr) {
-            // Calculate the new value for the current node
-            int newValue = current->val * 2 + carry;
-            // Update the current node's value
-            current->val = newValue % 10;
-            // Update carry for the next iteration
-            if (newValue > 9) {
-                carry = 1;
-            } else {
-                carry = 0;
-            }
-            // Move to the next node
-            previous = current;
-            current = current->next;
-        }
+        int carry = dfs(node->next);
 
-        // If there's a carry after the loop, add an extra node
-        if (carry != 0) {
-            ListNode* extraNode = new ListNode(carry);
-            previous->next = extraNode;
-        }
+        int sum = node->val * 2 + carry;
+        node->val = sum % 10;
 
-        // Reverse the list again to get the original order
-        ListNode* result = reverseList(reversedList);
-
-        return result;
+        return sum / 10;
     }
 
-    // Method to reverse the linked list
-    ListNode* reverseList(ListNode* node) {
-        ListNode* previous = nullptr, *current = node, *nextNode;
+    ListNode* doubleIt(ListNode* head) {
+        int carry = dfs(head);
 
-        // Traverse the original linked list
-        while (current != nullptr) {
-            // Store the next node
-            nextNode = current->next;
-            // Reverse the link
-            current->next = previous;
-            // Move to the next nodes
-            previous = current;
-            current = nextNode;
+        if (carry > 0) {
+            ListNode* newHead = new ListNode(carry);
+            newHead->next = head;
+            head = newHead;
         }
-        // Previous becomes the new head of the reversed list
-        return previous;
+        
+        return head;
     }
 };
+
+
+/*
+class Solution {
+public:
+    ListNode* revLL(ListNode* head){
+        ListNode* temp = head;
+        ListNode* prev = NULL;
+
+        while(temp != NULL){
+            ListNode* nextNode = temp->next;
+            temp->next = prev;
+            
+            prev = temp;
+            temp = nextNode;
+        }
+
+        return prev;
+    }
+    ListNode* doubleIt(ListNode* head) {
+        ListNode* rvs = revLL(head);
+
+        ListNode* curr = rvs;
+        int carry = 0;
+
+        while(curr != NULL){
+            int sum = carry;
+
+            sum += (curr->val) * 2;
+            curr->val = sum % 10;
+            carry = sum / 10;
+
+            curr = curr->next;
+        }
+
+        head = revLL(rvs);
+
+        if(carry){
+            ListNode* newNode = new ListNode(carry);
+            newNode->next = head;
+            return newNode;
+        }
+
+        return head;
+    }
+};
+
+*/
