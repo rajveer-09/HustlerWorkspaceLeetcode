@@ -6,9 +6,9 @@ public:
         ListNode *slow = head;
         ListNode *fast = head;
 
-        while (fast && fast->next && fast->next->next) {
+        while (fast && fast->next && fast->next) {
             slow = slow->next;
-            fast = fast->next->next->next;
+            fast = fast->next->next;
 
             if (slow == fast) {
                 return true;
