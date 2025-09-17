@@ -1,47 +1,37 @@
-#include <string>
-#include <vector>
-#include <unordered_map>
-
 class Solution {
 public:
+    bool check(int arr[]){
+        for(int i = 0; i < 26; i++){
+            if(arr[i] != 0) return false;
+        }
+
+        return true;
+    }
+
     vector<int> findAnagrams(string s, string p) {
-        vector<int> result;
-        unordered_map<char, int> freqP, freqS;
-        
-        for (char c : p) {
-            freqP[c]++;
-        }
-        
-        int left = 0, right = 0;
-        int required = freqP.size();
-        int formed = 0;
-        
-        while (right < s.size()) {
-            char c = s[right];
-            freqS[c]++;
-            
-            if (freqP.count(c) && freqS[c] == freqP[c]) {
-                formed++;
-            }
-            
-            while (formed == required) {
-                if (right - left + 1 == p.size()) {
-                    result.push_back(left);
+
+        int freq[26]{0};
+
+        vector<int> ans;
+
+        for(char it : p) freq[it - 'a']++;
+
+        int st = 0;
+
+        for(int i = 0; i < s.size(); i++){
+            freq[s[i] - 'a']--;
+
+            if((i - st + 1) == p.size()){
+                if(check(freq)){
+                    ans.push_back(st);
                 }
-                
-                char leftChar = s[left];
-                freqS[leftChar]--;
-                
-                if (freqP.count(leftChar) && freqS[leftChar] < freqP[leftChar]) {
-                    formed--;
-                }
-                
-                left++;
+
+                freq[s[st] - 'a']++;
+                st++;
             }
-            
-            right++;
+
         }
-        
-        return result;
+
+        return ans;
     }
 };
