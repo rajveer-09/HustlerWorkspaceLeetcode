@@ -1,30 +1,39 @@
 class Solution {
 public:
     string minWindow(string s, string t) {
-        map<char, int> mp;
-        for (char it : t) mp[it]++;
-
-        int start = 0, minLength = INT_MAX, left = 0;
-        int count = t.size();
-
-        for (int right = 0; right < s.size(); ++right) {
-            if (mp[s[right]] > 0) count--;
-            mp[s[right]]--;
-
-            while (count == 0) {
-                if (right - left + 1 < minLength) {
-                    minLength = right - left + 1;
-                    start = left;
+        unordered_map<char,int> k;
+        for(int i = 0; i < t.size(); i++){
+            k[t[i]]++;
+        }
+        
+        int n = s.size();
+        int left = 0, right = 0;
+        int ans = INT_MAX;
+        string result = "";
+        int start ;
+        int cnt = k.size(); // number of unique chars still needed
+        
+        while(right < n){
+            if(k.find(s[right]) != k.end()){
+                k[s[right]]--;
+                if(k[s[right]] == 0) cnt--;
+            }
+            
+            while(cnt == 0){
+                if(ans > right - left + 1){
+                    ans = right - left + 1;
+                    start=left;
                 }
-                mp[s[left]]++;
-                if (mp[s[left]] > 0) {
-                    count++;
+                if(k.find(s[left]) != k.end()){
+                    k[s[left]]++;
+                    if(k[s[left]] > 0) cnt++;
                 }
                 left++;
             }
+            right++;
         }
-        if (minLength == INT_MAX) return "";
-
-        return s.substr(start, minLength);
+        if(ans==INT_MAX) return "";
+        result =s.substr(start,ans);
+        return result;
     }
 };
