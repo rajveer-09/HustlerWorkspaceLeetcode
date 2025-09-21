@@ -1,36 +1,35 @@
 class Solution {
 public:
-    int memo(vector<int>& jD, int n, int idx, int d, vector<vector<int>>& dp) {
+    int solve(vector<int>& jd, int idx, int d, vector<vector<int>>& dp) {
+        if (d == 0 && idx >= jd.size()) {
+            return 0;
+        }
         if (d == 1) {
-            int maxi = jD[idx];
-            for (int i = idx; i < n; i++) {
-                maxi = max(maxi, jD[i]);
+            int maxi = INT_MIN;
+            for (int i = idx; i < jd.size(); i++) {
+                maxi = max(maxi, jd[i]);
             }
             return maxi;
         }
 
         if (dp[idx][d] != -1) return dp[idx][d];
 
-        int maxi = jD[idx];
+        int maxi = INT_MIN;
         int ans = INT_MAX;
-
-        for (int i = idx; i < n - d + 1; i++) {
-            maxi = max(maxi, jD[i]);
-            ans = min(ans, maxi + memo(jD, n, i + 1, d - 1, dp));
+        for (int i = idx; i <= jd.size() - d; i++) {
+            maxi = max(maxi, jd[i]);
+            ans = min(ans, maxi + solve(jd, i + 1, d - 1, dp));
         }
 
         return dp[idx][d] = ans;
     }
 
-    int minDifficulty(vector<int>& jD, int d) {
-        int n = jD.size();
-
-        if (n < d) return -1;
-
+    int minDifficulty(vector<int>& jd, int d) {
+        int n = jd.size();
+        if (d > n) return -1;
+        
         vector<vector<int>> dp(n, vector<int>(d + 1, -1));
 
-        int ans = memo(jD, n, 0, d, dp);
-
-        return ans;
+        return solve(jd, 0, d, dp);
     }
 };
